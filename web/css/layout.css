@@ -111,6 +111,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-width: 0; /* evita que el contenido se salga y empuje la pagina hacia los lados */
 }
 
 /* ============================================
@@ -201,6 +202,8 @@
 .content-area {
   padding: 32px;
   flex: 1;
+  min-width: 0;
+  overflow-x: auto; /* si algo no cabe, se desplaza dentro del contenido y no toda la pagina */
   background-color: #f8f9fa;
 }
 

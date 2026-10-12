@@ -1,10 +1,8 @@
 package modelo;
 
-import util.Texto;
-
 /**
  * Datos de un vehículo que está dentro del parqueadero y quiere salir,
- * junto con el cálculo de lo que debe pagar.
+ * más lo que debe pagar.
  */
 public class Salida {
     private int idRegistro;
@@ -14,22 +12,37 @@ public class Salida {
     private String cupo;
     private String horaIngreso;
     private String horaSalida;
-    private long minutos;
-    private double tarifaHora;   // valor de una hora (o fracción)
-    private int horas;           // horas cobradas (mínimo 1)
+    private long minutos;        // minutos que estuvo dentro
+    private double tarifaHora;   // valor de una hora
+    private int horas;           // horas que se cobran (mínimo 1)
     private double total;
 
-    public String getTicket() { return "TKT-" + idRegistro; }
-
-    // Horas adicionales después de la primera
-    public int getHorasAdicionales() { return Math.max(0, horas - 1); }
-    public double getTotalAdicionales() { return getHorasAdicionales() * tarifaHora; }
-    public String getTiempoTexto() { return Texto.duracion(minutos); }
-
-    /** Calcula cuántas horas se cobran y el total, con la tarifa ya cargada. */
+    // Calcula cuántas horas se cobran y el total.
+    // Ejemplo: 61 minutos -> 2 horas (se cobra la hora o fracción).
     public void calcular() {
-        horas = (int) Math.max(1, Math.ceil(minutos / 60.0));
+        horas = (int) Math.ceil(minutos / 60.0);
+        if (horas < 1) {
+            horas = 1;
+        }
         total = horas * tarifaHora;
+    }
+
+    public String getTicket() {
+        return "TKT-" + idRegistro;
+    }
+
+    // Horas después de la primera
+    public int getHorasAdicionales() {
+        return horas - 1;
+    }
+
+    public double getTotalAdicionales() {
+        return getHorasAdicionales() * tarifaHora;
+    }
+
+    // Texto como "2 h 5 min"
+    public String getTiempoTexto() {
+        return (minutos / 60) + " h " + (minutos % 60) + " min";
     }
 
     public int getIdRegistro() { return idRegistro; }

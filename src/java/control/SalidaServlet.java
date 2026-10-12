@@ -7,15 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import dao.AuditoriaDAO;
 import dao.SalidaDAO;
 import modelo.Salida;
 import modelo.Usuario;
 
-/**
- * Registro de salida de vehículos.
- *  - GET  : busca el vehículo (por placa o ticket) y muestra el cobro.
- *  - POST : confirma el pago, registra la salida y libera el cupo.
- */
+// Registro de salida. GET: busca el vehículo y muestra el cobro. POST: confirma el pago.
 @WebServlet("/SalidaServlet")
 public class SalidaServlet extends HttpServlet {
 
@@ -72,13 +69,20 @@ public class SalidaServlet extends HttpServlet {
             return;
         }
 
-        try {
-            Salida salida = new SalidaDAO().registrarSalida(idRegistro, medioPago);
+        SalidaDAO dao = new SalidaDAO();
+        Salida salida = dao.registrarSalida(idRegistro, medioPago);
+
+        if (salida == null) {
+            // algo falló: mostramos el mensaje
+            request.setAttribute("mensajeError", dao.getError());
+        } else {
+            // todo bien: mostramos el tiquete
             request.setAttribute("modalExito", "true");
             request.setAttribute("salidaOk", salida);
             request.setAttribute("medioPagoOk", medioPago);
-        } catch (IllegalStateException e) {
-            request.setAttribute("mensajeError", e.getMessage());
+            AuditoriaDAO.registrar(util.Sesion.usuario(request).getId(), "Registrar Salida", "Salida",
+                    "Salida del vehículo " + salida.getPlaca() + ", total $" + (long) salida.getTotal()
+                    + " (" + medioPago + ")", request.getRemoteAddr());
         }
         request.getRequestDispatcher("salida.jsp").forward(request, response);
     }

@@ -1,0 +1,29 @@
+<%--
+  Se incluye al inicio de cada pantalla:  <%@ include file="sesion.jspf" %>
+  1) Revisa que haya una sesión iniciada (si no, manda al login).
+  2) Deja listas las variables nombre y rol para el encabezado.
+  3) Define dos ayudas: ver() y plata().
+--%>
+<%@ page import="modelo.Usuario" %>
+<%
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    if (usuario == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+    String nombre = usuario.getNombre();
+    String rol = usuario.getRol();
+%>
+<%!
+    // Ayuda 1: si el texto viene vacío (null) devuelve "" y cambia < > " para que lo que escriba
+    // el usuario no dañe la página.
+    String ver(String texto) {
+        if (texto == null) return "";
+        return texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
+    }
+
+    // Ayuda 2: convierte 16250 en $16.250
+    String plata(double valor) {
+        return "$" + java.text.NumberFormat.getInstance(new java.util.Locale("es", "CO")).format(valor);
+    }
+%>

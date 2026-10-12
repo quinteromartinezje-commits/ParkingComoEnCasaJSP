@@ -1,4 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%!
+    // Cambia < > " & para que lo escrito no dañe la página (si viene vacío devuelve "")
+    String ver(String t) {
+        if (t == null) return "";
+        return t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
+    }
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -32,12 +39,12 @@
             <% String mensajeError = (String) request.getAttribute("mensajeError"); %>
             <% if (mensajeError != null) { %>
                 <div class="alert alert-error" style="color: red; margin-bottom: 15px; text-align: center;">
-                    <%= mensajeError %>
+                    <%= ver(mensajeError) %>
                 </div>
             <% } %>
 
             <!-- Formulario conectado a Java -->
-            <form action="LoginServlet" method="post" class="login-form" id="loginForm" novalidate>
+            <form action="LoginServlet" method="post" class="login-form">
     
                 <div class="form-group">
                     <label for="correo">Correo electrónico</label>
@@ -46,9 +53,8 @@
                             <rect x="2" y="4" width="20" height="16" rx="2"/>
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                         </svg>
-                        <input type="email" id="correo" name="correo" class="form-control" placeholder="admin@comoencasa.com" required>
+                        <input type="email" id="correo" name="correo" class="form-control" placeholder="admin@comoencasa.com" value="<%= ver(request.getParameter("correo")) %>" required>
                     </div>
-                    <span class="error-message" id="error-correo">Por favor, ingresa un correo válido</span>
                 </div>
 
                 <div class="form-group">
@@ -59,22 +65,7 @@
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                         </svg>
                         <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
-                        <button type="button" class="toggle-password" id="togglePassword">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#54595d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                        </button>
                     </div>
-                    <span class="error-message" id="error-password">Por favor, ingresa tu contraseña</span>
-                </div>
-
-                <div class="form-options">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="recuerdame" name="recuerdame">
-                        <span>Recuérdame</span>
-                    </label>
-                    <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
                 </div>
 
                 <button type="submit" class="btn-login">INGRESAR AL SISTEMA</button>
@@ -83,8 +74,5 @@
         </div>
 
     </div>
-            
-    <script src="js/main.js"></script>
-    <script src="js/login.js"></script>
 </body>
 </html>

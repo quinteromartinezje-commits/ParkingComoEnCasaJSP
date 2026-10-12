@@ -1,8 +1,6 @@
 package modelo;
 
-/**
- * Datos de las tarjetas del dashboard.
- */
+// Datos de las tarjetas del dashboard.
 public class DashboardResumen {
     private int vehiculosHoy;      // ingresos de hoy
     private int salidasHoy;        // salidas de hoy

@@ -1,0 +1,107 @@
+/* ============================================
+   AJUSTES - Parking Como en Casa
+   Cosas que antes hacía JavaScript y ahora se resuelven con CSS/HTML.
+   ============================================ */
+
+/* Los enlaces con aspecto de botón (por ejemplo "Cerrar" o "Cancelar") */
+a.btn,
+a.btn-mini {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Placas siempre en mayúsculas (el servlet también las convierte) */
+input.mayusculas {
+    text-transform: uppercase;
+}
+
+/* Tipo de vehículo seleccionado (Ingreso) */
+.vehicle-btn:has(input:checked) {
+    background-color: var(--color-primary, #3366cc);
+    color: var(--color-bg, white);
+}
+
+/* Medio de pago seleccionado (Salida) */
+.medio-pago-btn input[type="radio"] {
+    display: none;
+}
+label.medio-pago-btn {
+    cursor: pointer;
+}
+.medio-pago-btn:has(input:checked) {
+    border-color: var(--color-primary, #3366cc);
+    background-color: var(--color-primary, #3366cc);
+    color: var(--color-bg, white);
+}
+.medio-pago-btn:has(input:checked) svg {
+    stroke: white !important;
+}
+
+/* Pestañas y botones de página que ahora son enlaces */
+a.nivel-tab,
+a.btn-pagina {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mensajes de aviso dentro de las pantallas */
+.msg {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+.msg-ok { background: #e6f7ee; color: #0b6b3a; border: 1px solid #10b981; }
+.msg-error { background: #fdecea; color: #a61b1b; border: 1px solid #dc3545; }
+
+/* Una fila de tabla que se puede pulsar (Consulta) */
+a.fila-enlace {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Los iconos de editar/eliminar ahora son enlaces <a> */
+a.btn-icon {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Consulta: el detalle del vehículo se muestra cuando el servlet le pone la clase "abierta" */
+.fila-detalle.abierta {
+    display: table-row;
+}
+a.cupo-card {
+    color: inherit;
+}
+
+/* El texto de ayuda de los buscadores se queda como se escribió (no en mayúsculas) */
+input.mayusculas::placeholder {
+    text-transform: none;
+}
+
+/* Colores de los iconos de Disponibles / Ocupados / Reservados */
+.stat-disponible .stat-icon { color: #3366cc; }
+.stat-ocupado .stat-icon { color: #dc3545; }
+.stat-reservado .stat-icon { color: #e0a800; }
+
+/* Etiqueta "Inactivo" de Tarifas (igual que la de Usuarios) */
+.badge-inactivo {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+/* Usuarios: sin columna del formulario, la tabla usa todo el ancho */
+.usuarios-layout {
+    grid-template-columns: 1fr;
+}

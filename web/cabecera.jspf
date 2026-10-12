@@ -1,0 +1,16 @@
+<%-- Encabezado de arriba (título + usuario). Antes de incluirlo la página define: String tituloPagina = "..."; --%>
+<header class="navbar">
+                <h1 class="page-title"><%= tituloPagina %></h1>
+                <div class="navbar-right">
+                    <button class="icon-btn" title="Notificaciones"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+                    <div class="user-info">
+                        <a href="PerfilServlet" title="Ver mi perfil" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;">
+                        <div class="user-avatar"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                        <div class="user-details">
+                            <span class="user-name"><%= ver(nombre) %></span>
+                            <span class="user-role"><%= ver(rol) %></span>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </header>

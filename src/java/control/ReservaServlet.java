@@ -7,14 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import dao.AuditoriaDAO;
 import dao.ReservaDAO;
+import util.Sesion;
 import modelo.Usuario;
 
-/**
- * Reservas de cupo.
- *  - GET  : muestra el formulario y la lista de reservas activas.
- *  - POST : crea una reserva (accion=crear) o la cancela (accion=cancelar).
- */
+// Reservas. GET: formulario y lista. POST: crea o cancela una reserva.
 @WebServlet("/ReservaServlet")
 public class ReservaServlet extends HttpServlet {
 
@@ -35,6 +33,11 @@ public class ReservaServlet extends HttpServlet {
         } else if ("cancelada".equals(ok)) {
             request.setAttribute("mensajeOk", "Reserva cancelada. El cupo quedó disponible.");
         }
+        // ?cancelar=ID -> se muestra la ventana para confirmar la cancelación
+        String cancelar = request.getParameter("cancelar");
+        if (cancelar != null && cancelar.matches("\\d+")) {
+            request.setAttribute("cancelarId", Integer.parseInt(cancelar));
+        }
         mostrar(request, response);
     }
 
@@ -53,48 +56,58 @@ public class ReservaServlet extends HttpServlet {
         ReservaDAO dao = new ReservaDAO();
         String accion = request.getParameter("accion");
 
-        try {
-            if ("cancelar".equals(accion)) {
-                int id = Integer.parseInt(request.getParameter("idReserva"));
-                dao.cancelar(id);
+        // ---- Cancelar una reserva ----
+        if ("cancelar".equals(accion)) {
+            int id = Integer.parseInt(request.getParameter("idReserva"));
+            if (dao.cancelar(id)) {
+                AuditoriaDAO.registrar(Sesion.usuario(request).getId(), "Cancelar Reserva", "Reservas",
+                        "Se canceló la reserva #" + id, request.getRemoteAddr());
                 response.sendRedirect("ReservaServlet?ok=cancelada");
-                return;
+            } else {
+                request.setAttribute("mensajeError", dao.getError());
+                mostrar(request, response);
             }
+            return;
+        }
 
-            // accion = crear
-            String nombre = limpiar(request.getParameter("nombre"));
-            String documento = limpiar(request.getParameter("documento"));
-            String telefono = limpiar(request.getParameter("telefono"));
-            String correo = limpiar(request.getParameter("correo"));
-            String placa = limpiar(request.getParameter("placa")).toUpperCase();
-            String tipo = limpiar(request.getParameter("tipo"));
-            String cupo = limpiar(request.getParameter("cupo"));
-            String medioPago = limpiar(request.getParameter("medioPago"));
-            String valorTexto = limpiar(request.getParameter("valor"));
+        // ---- Crear una reserva: leemos lo que escribió el usuario ----
+        String nombre = limpiar(request.getParameter("nombre"));
+        String documento = limpiar(request.getParameter("documento"));
+        String telefono = limpiar(request.getParameter("telefono"));
+        String correo = limpiar(request.getParameter("correo"));
+        String placa = limpiar(request.getParameter("placa")).toUpperCase();
+        String tipo = limpiar(request.getParameter("tipo"));
+        String cupo = limpiar(request.getParameter("cupo"));
+        String medioPago = limpiar(request.getParameter("medioPago"));
+        String valorTexto = limpiar(request.getParameter("valor"));
 
-            if (nombre.isEmpty() || documento.isEmpty() || placa.isEmpty()
-                    || tipo.isEmpty() || cupo.isEmpty() || medioPago.isEmpty() || valorTexto.isEmpty()) {
-                throw new IllegalStateException("Completa todos los campos obligatorios (*).");
-            }
-            if (!placa.matches("[A-Z0-9-]{3,10}")) {
-                throw new IllegalStateException("La placa solo puede tener letras, números y guion (3 a 10 caracteres).");
-            }
-            double valor;
-            try {
-                valor = Double.parseDouble(valorTexto);
-            } catch (NumberFormatException e) {
-                throw new IllegalStateException("El valor de la mensualidad debe ser un número.");
-            }
-            if (valor <= 0) {
-                throw new IllegalStateException("El valor de la mensualidad debe ser mayor que cero.");
-            }
+        // Validaciones sencillas
+        if (nombre.isEmpty() || documento.isEmpty() || placa.isEmpty()
+                || tipo.isEmpty() || cupo.isEmpty() || medioPago.isEmpty() || valorTexto.isEmpty()) {
+            request.setAttribute("mensajeError", "Completa todos los campos obligatorios (*).");
+            mostrar(request, response);
+            return;
+        }
 
-            dao.crear(nombre, documento, telefono, correo, placa, tipo, cupo, valor, medioPago);
+        double valor = 0;
+        try {
+            valor = Double.parseDouble(valorTexto);
+        } catch (NumberFormatException e) {
+            valor = 0;
+        }
+        if (valor <= 0) {
+            request.setAttribute("mensajeError", "El valor de la mensualidad debe ser un número mayor que cero.");
+            mostrar(request, response);
+            return;
+        }
+
+        // Guardamos. Si sale bien, redirigimos; si no, mostramos el error.
+        if (dao.crear(nombre, documento, telefono, correo, placa, tipo, cupo, valor, medioPago)) {
+            AuditoriaDAO.registrar(Sesion.usuario(request).getId(), "Crear Reserva", "Reservas",
+                    "Reserva de la placa " + placa + " en el cupo " + cupo, request.getRemoteAddr());
             response.sendRedirect("ReservaServlet?ok=creada");
-
-        } catch (IllegalStateException | NumberFormatException e) {
-            String mensaje = (e instanceof NumberFormatException) ? "Datos no válidos." : e.getMessage();
-            request.setAttribute("mensajeError", mensaje);
+        } else {
+            request.setAttribute("mensajeError", dao.getError());
             mostrar(request, response);
         }
     }

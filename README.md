@@ -5,7 +5,7 @@ estadía, reservar cupos y ver todo en un dashboard que se actualiza solo.
 
 Proyecto de la evidencia **GA7-220501096-AA2-EV02 – Módulos de software codificados y probados**.
 
-Hecho con **Java (Servlets), JSP, HTML, CSS, JavaScript y MySQL**, en NetBeans con Tomcat.
+Hecho con **Java (Servlets), JSP, HTML, CSS y MySQL**. No usa JavaScript: toda la lógica está en Java, en NetBeans con Tomcat.
 
 ---
 
@@ -37,6 +37,8 @@ El dashboard no tiene números escritos a mano: todo lo calcula `DashboardDAO` c
 - `salida.jsp` → formularios hacia `SalidaServlet`
 - `reservas.jsp` → formularios hacia `ReservaServlet`
 - `login.jsp` → formulario hacia `LoginServlet`
+- `tarifas.jsp`, `cupos.jsp`, `usuarios.jsp`, `reportes.jsp`, `auditoria.jsp`, `consulta.jsp`, `incidentes.jsp`, `perfil.jsp`
+  → formularios hacia `TarifaServlet`, `CupoServlet`, `UsuarioServlet`, `ReporteServlet`, `AuditoriaServlet`, `ConsultaServlet`, `IncidenteServlet` y `PerfilServlet`
 
 **2. Métodos GET y POST**
 - **GET** (pedir o consultar datos): `DashboardServlet` (abrir el dashboard), `IngresoServlet` (abrir el formulario con cupos libres),
@@ -46,7 +48,9 @@ El dashboard no tiene números escritos a mano: todo lo calcula `DashboardDAO` c
 
 **3. Elementos de JSP**
 - Directivas: `<%@ page contentType=... %>` y `<%@ page import=... %>`
-- Scriptlets: `<% ... %>` (comprobar la sesión, recorrer listas con `for`, condiciones con `if`)
+- Scriptlets: `<% ... %>` (recorrer listas con `for`, condiciones con `if`)
+- Declaraciones: `<%! ... %>` (las funciones de ayuda `ver()`, `plata()` y `activo()`)
+- Inclusión: `<%@ include file="menu.jspf" %>` (el menú, el encabezado y la revisión de sesión se escriben una sola vez)
 - Expresiones: `<%= ... %>` (mostrar nombre, cupos, totales)
 - Objetos de JSP: `session`, `request` y `response`
 
@@ -62,12 +66,15 @@ src/java/
   control/   Servlets (reciben lo que envía la página)
   dao/       Consultas a la base de datos (cada archivo se ocupa de un tema)
   modelo/    Clases simples que llevan datos de un lado a otro
-  util/      ConexionBD (conexión a MySQL) y Texto (formatos)
+  util/      ConexionBD (conexión a MySQL)
 web/
   *.jsp      Páginas que ve el usuario
-  css/ js/ img/
+  *.jspf     Pedazos que se repiten (sesion, menu, cabecera)
+  css/ img/  (no hay carpeta js: el proyecto no usa JavaScript)
 database/
   actualizacion_dashboard.sql   Datos y columnas que necesita el proyecto
+  actualizacion_java.sql        Columnas de incidentes y roles (ejecutar una vez)
+  datos_de_prueba.sql           Datos de ejemplo
 ```
 
 Cada pantalla sigue la misma idea: **la página (JSP) → el servlet → el DAO → la base de datos**, y de vuelta.
@@ -81,6 +88,7 @@ Cada pantalla sigue la misma idea: **la página (JSP) → el servlet → el DAO 
    (por defecto `jess` / `1234`; se cambia en `src/java/util/ConexionBD.java`).
 3. Abrir en MySQL Workbench el archivo `database/actualizacion_dashboard.sql` y ejecutarlo **una sola vez**.
    Carga los medios de pago, las tarifas por hora y las columnas para las reservas.
+   Después ejecutar también `database/actualizacion_java.sql` (columnas de la pantalla Incidentes y los roles).
 4. Abrir el proyecto en NetBeans. Si aparece algún icono rojo en **Libraries**, agregar el conector de MySQL
    (`mysql-connector-j`) y la librería Java EE API.
 5. Clic derecho sobre el proyecto → **Clean and Build** → **Run**.
@@ -104,6 +112,22 @@ Cada pantalla sigue la misma idea: **la página (JSP) → el servlet → el DAO 
 ## Detalles de seguridad que se tuvieron en cuenta
 
 - Las consultas usan `PreparedStatement` (los datos se pasan como parámetros, no pegados al texto SQL).
-- Lo que escribe el usuario se "escapa" antes de mostrarse (`Texto.escapar`) para que no se interprete como HTML.
+- Lo que escribe el usuario se limpia antes de mostrarse (función `ver()` dentro de cada JSP) para que no se interprete como HTML.
 - Cada página y servlet comprueba que haya una sesión iniciada.
 - La salida y las reservas usan **transacciones**: si un paso falla, no se guarda nada a medias.
+
+## ¿Cómo funciona sin JavaScript?
+
+- Las ventanas emergentes (modales) las decide el servidor: el servlet envía un dato y la página escribe `class="modal-overlay active"` solo si toca mostrarla. Se cierran con un enlace que vuelve al servlet.
+- Editar y eliminar funcionan con enlaces (`TarifaServlet?editar=3`) y el servlet vuelve a pintar la página con el formulario lleno.
+- Las validaciones las hacen el navegador (`required`, `type="email"`, `min`) y, sobre todo, el servlet.
+- Las placas en mayúsculas: CSS (`text-transform`) en pantalla y `toUpperCase()` en el servlet.
+- Los filtros (Auditoría, Reportes, Consulta, Cupos) son formularios GET normales.
+
+## Limitaciones conocidas
+- Reportes se exporta a CSV (abre en Excel); no hay PDF.
+- Incidentes no sube fotos de evidencia.
+- Las contraseñas están en texto plano en la base de datos (simple a propósito).
+
+## Para entender el código
+Lee `GUIA_DEL_CODIGO.md`: explica en palabras sencillas cómo funciona cada módulo.

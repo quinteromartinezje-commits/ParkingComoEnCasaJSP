@@ -1,6 +1,5 @@
 package control;
 
-import dao.UsuarioDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,47 +7,70 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import dao.AuditoriaDAO;
+import dao.UsuarioDAO;
 import modelo.Usuario;
 
+// Login. POST valida correo y clave. Con ?salir=1 cierra la sesión.
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // 1. Recoger los datos que el usuario escribió en el login.jsp
+
+        request.setCharacterEncoding("UTF-8");
+
+        // 1. Lo que escribió el usuario en login.jsp
         String correo = request.getParameter("correo");
         String password = request.getParameter("password");
-        System.out.println(">>> Intento de inicio de sesión: " + correo);
-        
-        // 2. Llamar al detective (DAO) para que valide los datos
-        UsuarioDAO dao = new UsuarioDAO();
-        Usuario usuarioValido = dao.validarUsuario(correo, password);
-        
-        // 3. Tomar la decisión
+        if (correo == null) correo = "";
+        if (password == null) password = "";
+        correo = correo.trim();
+
+        // 2. Validaciones sencillas (antes lo hacía JavaScript)
+        if (correo.isEmpty() || !correo.contains("@")) {
+            volverAlLogin(request, response, "Por favor, ingresa un correo válido.");
+            return;
+        }
+        if (password.isEmpty()) {
+            volverAlLogin(request, response, "Por favor, ingresa tu contraseña.");
+            return;
+        }
+
+        // 3. Le preguntamos al DAO si el usuario existe
+        Usuario usuarioValido = new UsuarioDAO().validarUsuario(correo, password);
+
         if (usuarioValido != null) {
-            // ¡El usuario existe! Creamos una "sesión" para recordar que ya inició sesión
+            // Guardamos al usuario en la sesión (así el sistema recuerda que ya entró)
             HttpSession session = request.getSession();
             session.setAttribute("usuario", usuarioValido);
-            
-            // Lo mandamos al dashboard (la página principal)
-            response.sendRedirect("DashboardServlet"); 
+            new UsuarioDAO().registrarAcceso(usuarioValido.getId());
+            AuditoriaDAO.registrar(usuarioValido.getId(), "Iniciar Sesión", "Login",
+                    "Inicio de sesión de " + usuarioValido.getCorreo(), request.getRemoteAddr());
+            response.sendRedirect("DashboardServlet");
         } else {
-            // El usuario o contraseña están mal
-            // Guardamos un mensaje de error para mostrarlo en el login
-            request.setAttribute("mensajeError", "Correo o contraseña incorrectos. Intenta de nuevo.");
-            
-            // Lo devolvemos a la página de login
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            volverAlLogin(request, response, "Correo o contraseña incorrectos. Intenta de nuevo.");
         }
     }
 
-    // Este método se activa si alguien entra directo a la dirección del Servlet por GET
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Si llegan por GET, simplemente los mandamos al login
+
+        // ?salir=1 -> cerrar sesión
+        if ("1".equals(request.getParameter("salir"))) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+        }
         response.sendRedirect("login.jsp");
+    }
+
+    private void volverAlLogin(HttpServletRequest request, HttpServletResponse response, String mensaje)
+            throws ServletException, IOException {
+        request.setAttribute("mensajeError", mensaje);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 }

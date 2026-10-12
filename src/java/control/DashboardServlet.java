@@ -10,9 +10,7 @@ import javax.servlet.http.HttpSession;
 import dao.DashboardDAO;
 import modelo.Usuario;
 
-/**
- * Dashboard: GET muestra los datos; POST hace lo mismo.
- */
+// Carga los datos del dashboard.
 @WebServlet("/DashboardServlet")
 public class DashboardServlet extends HttpServlet {
 

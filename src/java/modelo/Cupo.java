@@ -1,8 +1,6 @@
 package modelo;
 
-/**
- * Un cupo de la cuadrícula de ocupación.
- */
+// Un cupo del mapa de ocupación.
 public class Cupo {
     private final String codigo;
     private final String estado;

@@ -20,13 +20,12 @@ public class IngresoDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     id = rs.getInt("id");
-                    System.out.println("✅ Tipo de vehículo encontrado. ID: " + id);
                 } else {
-                    System.out.println("⚠️ Tipo de vehículo NO encontrado: " + nombreTipo);
+                    System.out.println("Tipo de vehículo NO encontrado: " + nombreTipo);
                 }
             }
         } catch (Exception e) {
-            System.out.println("❌ Error en getIdTipoVehiculo: " + e.getMessage());
+            System.out.println("Error en getIdTipoVehiculo: " + e.getMessage());
         }
         return id;
     }
@@ -39,7 +38,6 @@ public class IngresoDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     boolean existe = rs.getInt(1) > 0;
-                    System.out.println("✅ Verificación de placa '" + placa + "': " + (existe ? "Ya existe" : "No existe, se creará"));
                     return existe;
                 }
             }
@@ -56,10 +54,9 @@ public class IngresoDAO {
             ps.setString(1, placa);
             ps.setInt(2, idTipo);
             ps.executeUpdate();
-            System.out.println("✅ Vehículo '" + placa + "' registrado en base de datos.");
             return true;
         } catch (Exception e) {
-            System.out.println("❌ ERROR al registrar vehículo: " + e.getMessage());
+            System.out.println("Error al registrar vehículo: " + e.getMessage());
             return false;
         }
     }
@@ -72,13 +69,12 @@ public class IngresoDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     int id = rs.getInt("id");
-                    System.out.println("✅ Cupo '" + codigoEspacio + "' encontrado. ID: " + id);
                     return id;
                 }
-                System.out.println("❌ ERROR: El cupo '" + codigoEspacio + "' NO existe en la tabla espacio_parqueo.");
+                System.out.println("ERROR: El cupo '" + codigoEspacio + "' NO existe en la tabla espacio_parqueo.");
             }
         } catch (Exception e) {
-            System.out.println("❌ ERROR en getIdEspacio: " + e.getMessage());
+            System.out.println("Error en getIdEspacio: " + e.getMessage());
         }
         return 0;
     }
@@ -89,9 +85,8 @@ public class IngresoDAO {
         try (Connection conn = ConexionBD.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idEspacio);
             ps.executeUpdate();
-            System.out.println("✅ Cupo actualizado a 'ocupado'.");
         } catch (Exception e) {
-            System.out.println("❌ ERROR al marcar ocupado: " + e.getMessage());
+            System.out.println("Error al marcar ocupado: " + e.getMessage());
         }
     }
 
@@ -104,7 +99,7 @@ public class IngresoDAO {
                 if (rs.next()) return rs.getString(1);
             }
         } catch (Exception e) {
-            System.out.println("❌ ERROR en getEstadoEspacio: " + e.getMessage());
+            System.out.println("Error en getEstadoEspacio: " + e.getMessage());
         }
         return "";
     }
@@ -118,7 +113,7 @@ public class IngresoDAO {
                 lista.add(rs.getString(1));
             }
         } catch (Exception e) {
-            System.out.println("❌ ERROR en getCuposDisponibles: " + e.getMessage());
+            System.out.println("Error en getCuposDisponibles: " + e.getMessage());
         }
         return lista;
     }
@@ -131,7 +126,6 @@ public class IngresoDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     boolean dentro = rs.getInt(1) > 0;
-                    System.out.println("✅ Verificación de ingreso: " + (dentro ? "Ya está dentro" : "Puede ingresar"));
                     return dentro;
                 }
             }
@@ -158,13 +152,12 @@ public class IngresoDAO {
                 try (ResultSet keys = ps.getGeneratedKeys()) {
                     if (keys.next()) {
                         int idRegistro = keys.getInt(1);
-                        System.out.println("✅ Registro guardado en 'registros_parqueo'. ID: " + idRegistro);
                         return idRegistro;
                     }
                 }
             }
         } catch (Exception e) {
-            System.out.println("❌❌ ERROR REAL DE LA BASE DE DATOS: " + e.getMessage());
+            System.out.println("Error de la base de datos: " + e.getMessage());
         }
         return 0;
     }
@@ -192,8 +185,23 @@ public class IngresoDAO {
             }
             System.out.println("📊 Se obtuvieron " + lista.size() + " registros para la tabla.");
         } catch (Exception e) {
-            System.out.println("❌ ERROR en la consulta de últimos ingresos: " + e.getMessage());
+            System.out.println("Error en la consulta de últimos ingresos: " + e.getMessage());
         }
         return lista;
+    }
+
+    // ¿La tarifa de este tipo de vehículo está inhabilitada? (se cambia en la pantalla Tarifas)
+    public boolean tarifaInactiva(String tipo) {
+        String sql = "SELECT COUNT(*) FROM tarifas f JOIN tipo_vehiculo t ON t.id = f.id_tipo_vehiculo "
+                + "WHERE t.nombre_tipo = ? AND f.tarifa_vigente = 1 AND f.estado = 0";
+        try (java.sql.Connection conn = util.ConexionBD.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tipo);
+            java.sql.ResultSet rs = ps.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+        } catch (Exception e) {
+            System.out.println("Error al revisar la tarifa: " + e.getMessage());
+            return false;
+        }
     }
 }

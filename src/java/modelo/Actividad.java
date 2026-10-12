@@ -1,8 +1,6 @@
 package modelo;
 
-/**
- * Una línea de la lista "Actividad reciente".
- */
+// Una línea de "Actividad reciente".
 public class Actividad {
     private final String tipo;     // ingreso, salida, reserva o incidente
     private final String titulo;   // texto grande

@@ -9,12 +9,8 @@ import modelo.Actividad;
 import modelo.Cupo;
 import modelo.DashboardResumen;
 import util.ConexionBD;
-import util.Texto;
 
-/**
- * Consultas del dashboard: todo sale de la base de datos,
- * así que cada ingreso, salida o reserva cambia lo que se ve en pantalla.
- */
+// Consultas del dashboard. Todo sale de la base de datos.
 public class DashboardDAO {
 
     // Recaudo del día: parqueo por hora + mensualidades de las reservas
@@ -30,7 +26,7 @@ public class DashboardDAO {
         "SELECT COUNT(*) FROM suscripciones_mensuales " +
         "WHERE LOWER(estado_suscripcion) = 'activa' AND fecha_fin >= CURDATE()";
 
-    // ---------- Resumen para las tarjetas ----------
+    // Resumen para las tarjetas
     public DashboardResumen getResumen() {
         DashboardResumen r = new DashboardResumen();
 
@@ -52,7 +48,7 @@ public class DashboardDAO {
         return r;
     }
 
-    // ---------- Cuadrícula de ocupación ----------
+    // Cuadrícula de ocupación
     public List<Cupo> getCupos() {
         List<Cupo> lista = new ArrayList<>();
         String sql = "SELECT codigo_espacio, estado_actual FROM espacio_parqueo ORDER BY id";
@@ -63,12 +59,12 @@ public class DashboardDAO {
                 lista.add(new Cupo(rs.getString("codigo_espacio"), rs.getString("estado_actual")));
             }
         } catch (Exception e) {
-            System.out.println("❌ ERROR en getCupos: " + e.getMessage());
+            System.out.println("Error en getCupos: " + e.getMessage());
         }
         return lista;
     }
 
-    // ---------- Actividad reciente ----------
+    // Actividad reciente
     // Hacemos 4 consultas sencillas (ingresos, salidas, reservas e incidentes),
     // las juntamos en una sola lista y la ordenamos del más reciente al más antiguo.
     public List<Actividad> getActividadReciente(int limite) {
@@ -104,11 +100,11 @@ public class DashboardDAO {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 String titulo = "Ingreso: " + rs.getString("nombre_tipo") + " (" + rs.getString("id_placa") + ")";
-                String detalle = "Cupo " + rs.getString("codigo_espacio") + " · " + Texto.hace(rs.getLong("minutos"));
+                String detalle = "Cupo " + rs.getString("codigo_espacio") + " · " + hace(rs.getLong("minutos"));
                 lista.add(new Actividad("ingreso", titulo, detalle, rs.getLong("minutos")));
             }
         } catch (Exception e) {
-            System.out.println("❌ ERROR en actividad de ingresos: " + e.getMessage());
+            System.out.println("Error en actividad de ingresos: " + e.getMessage());
         }
         return lista;
     }
@@ -129,11 +125,11 @@ public class DashboardDAO {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 String titulo = "Salida: " + rs.getString("nombre_tipo") + " (" + rs.getString("id_placa") + ")";
-                String detalle = Texto.hace(rs.getLong("minutos"));
+                String detalle = hace(rs.getLong("minutos"));
                 lista.add(new Actividad("salida", titulo, detalle, rs.getLong("minutos")));
             }
         } catch (Exception e) {
-            System.out.println("❌ ERROR en actividad de salidas: " + e.getMessage());
+            System.out.println("Error en actividad de salidas: " + e.getMessage());
         }
         return lista;
     }
@@ -156,7 +152,7 @@ public class DashboardDAO {
                 lista.add(new Actividad("reserva", titulo, detalle, rs.getLong("minutos")));
             }
         } catch (Exception e) {
-            System.out.println("❌ ERROR en actividad de reservas: " + e.getMessage());
+            System.out.println("Error en actividad de reservas: " + e.getMessage());
         }
         return lista;
     }
@@ -173,23 +169,23 @@ public class DashboardDAO {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 String titulo = "Incidente: " + rs.getString("descripcion");
-                String detalle = rs.getString("ubicacion") + " · " + Texto.hace(rs.getLong("minutos"));
+                String detalle = rs.getString("ubicacion") + " · " + hace(rs.getLong("minutos"));
                 lista.add(new Actividad("incidente", titulo, detalle, rs.getLong("minutos")));
             }
         } catch (Exception e) {
-            System.out.println("❌ ERROR en actividad de incidentes: " + e.getMessage());
+            System.out.println("Error en actividad de incidentes: " + e.getMessage());
         }
         return lista;
     }
 
-    // ---------- Utilidades ----------
+    // Utilidades
     private int scalarInt(String sql) {
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             if (rs.next()) return rs.getInt(1);
         } catch (Exception e) {
-            System.out.println("❌ ERROR en consulta del dashboard: " + e.getMessage());
+            System.out.println("Error en consulta del dashboard: " + e.getMessage());
         }
         return 0;
     }
@@ -200,8 +196,21 @@ public class DashboardDAO {
              ResultSet rs = ps.executeQuery()) {
             if (rs.next()) return rs.getDouble(1);
         } catch (Exception e) {
-            System.out.println("❌ ERROR en consulta del dashboard: " + e.getMessage());
+            System.out.println("Error en consulta del dashboard: " + e.getMessage());
         }
         return 0;
+    }
+
+    // Convierte minutos en "Hace 5 min", "Hace 2 h" o "Hace 3 d"
+    private String hace(long minutos) {
+        if (minutos < 1) {
+            return "Hace instantes";
+        } else if (minutos < 60) {
+            return "Hace " + minutos + " min";
+        } else if (minutos < 1440) {
+            return "Hace " + (minutos / 60) + " h";
+        } else {
+            return "Hace " + (minutos / 1440) + " d";
+        }
     }
 }

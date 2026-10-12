@@ -9,14 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import dao.AuditoriaDAO;
 import dao.IngresoDAO;
 import modelo.Usuario;
 
-/**
- * Registro de ingreso de vehículos.
- *  - GET  : muestra el formulario con los cupos libres y los últimos ingresos.
- *  - POST : recibe el formulario y guarda el ingreso.
- */
+// Registro de ingreso. GET: formulario con cupos libres. POST: guarda el ingreso.
 @WebServlet("/IngresoServlet")
 public class IngresoServlet extends HttpServlet {
 
@@ -52,14 +49,30 @@ public class IngresoServlet extends HttpServlet {
 
         IngresoDAO dao = new IngresoDAO();
 
-        // 0. Validar que lleguen los datos
-        if (placaParam == null || placaParam.trim().isEmpty() || tipo == null || cupo == null) {
-            enviarError(request, response, dao, "❌ Faltan datos: placa, tipo de vehículo o cupo.");
+        // 0. Validar los campos: cada uno que falte muestra su aviso rojo debajo
+        boolean faltan = false;
+        if (placaParam == null || placaParam.trim().isEmpty()) {
+            request.setAttribute("errPlaca", "Por favor, ingresa la placa del vehículo");
+            faltan = true;
+        }
+        if (tipo == null || tipo.isEmpty()) {
+            request.setAttribute("errTipo", "Por favor, selecciona el tipo de vehículo");
+            faltan = true;
+        }
+        if (cupo == null || cupo.isEmpty()) {
+            request.setAttribute("errCupo", "Por favor, selecciona un cupo");
+            faltan = true;
+        }
+        if (faltan) {
+            cargarListas(request, dao);
+            request.getRequestDispatcher("ingreso.jsp").forward(request, response);
             return;
         }
         String placa = placaParam.toUpperCase().trim();
         if (!placa.matches("[A-Z0-9-]{3,10}")) {
-            enviarError(request, response, dao, "❌ La placa solo puede tener letras, números y guion (3 a 10 caracteres).");
+            request.setAttribute("errPlaca", "La placa solo puede tener letras, números y guion (3 a 10 caracteres)");
+            cargarListas(request, dao);
+            request.getRequestDispatcher("ingreso.jsp").forward(request, response);
             return;
         }
 
@@ -76,7 +89,16 @@ public class IngresoServlet extends HttpServlet {
         int idTipo = dao.getIdTipoVehiculo(tipo);
         if (idTipo == 0) {
             enviarError(request, response, dao,
-                    "❌ No se encontró el tipo de vehículo '" + tipo + "' en la base de datos. Verifica la tabla tipo_vehiculo.");
+                    "No se encontró el tipo de vehículo '" + tipo + "' en la base de datos. Verifica la tabla tipo_vehiculo.");
+            return;
+        }
+
+        // 2.1 Si la tarifa de ese tipo está inhabilitada, no se registran ingresos
+        if (dao.tarifaInactiva(tipo)) {
+            request.setAttribute("modalTarifa", "true");
+            request.setAttribute("tipoElegido", tipo);
+            cargarListas(request, dao);
+            request.getRequestDispatcher("ingreso.jsp").forward(request, response);
             return;
         }
 
@@ -84,7 +106,7 @@ public class IngresoServlet extends HttpServlet {
         int idEspacio = dao.getIdEspacio(cupo);
         if (idEspacio == 0) {
             enviarError(request, response, dao,
-                    "❌ No se encontró el cupo '" + cupo + "' en la base de datos. Verifica la tabla espacio_parqueo.");
+                    "No se encontró el cupo '" + cupo + "' en la base de datos. Verifica la tabla espacio_parqueo.");
             return;
         }
         String estadoCupo = dao.getEstadoEspacio(idEspacio);
@@ -98,11 +120,23 @@ public class IngresoServlet extends HttpServlet {
             return;
         }
 
+        // 3.1 Los cupos M son solo para motos; carros y camionetas van en los cupos A
+        boolean cupoDeMotos = cupo.toUpperCase().startsWith("M");
+        boolean esMoto = tipo.equalsIgnoreCase("Moto");
+        if (cupoDeMotos != esMoto) {
+            request.setAttribute("modalTipo", "true");
+            request.setAttribute("tipoElegido", tipo);
+            request.setAttribute("cupoElegido", cupo);
+            cargarListas(request, dao);
+            request.getRequestDispatcher("ingreso.jsp").forward(request, response);
+            return;
+        }
+
         // 4. Registrar el vehículo si es nuevo
         if (!dao.existeVehiculo(placa)) {
             if (!dao.registrarVehiculo(placa, idTipo)) {
                 enviarError(request, response, dao,
-                        "❌ No se pudo registrar el vehículo '" + placa + "'. Revisa la consola del servidor.");
+                        "No se pudo registrar el vehículo '" + placa + "'. Revisa la consola del servidor.");
                 return;
             }
         }
@@ -114,13 +148,15 @@ public class IngresoServlet extends HttpServlet {
 
         if (idRegistro == 0) {
             enviarError(request, response, dao,
-                    "❌ El registro NO se guardó. id_usuario=" + admin.getId() + ", id_espacio=" + idEspacio
-                    + ". Revisa en la consola del servidor la línea 'ERROR REAL DE LA BASE DE DATOS'.");
+                    "El registro NO se guardó. id_usuario=" + admin.getId() + ", id_espacio=" + idEspacio
+                    + ". Revisa en la consola del servidor la línea 'Error de la base de datos'.");
             return;
         }
 
         // 6. Solo ahora el cupo pasa a ocupado
         dao.marcarOcupado(idEspacio);
+        AuditoriaDAO.registrar(admin.getId(), "Registrar Ingreso", "Ingreso",
+                "Ingreso del vehículo " + placa + " (" + tipo + ") en el cupo " + cupo, request.getRemoteAddr());
 
         // 7. Preparar el mensaje de éxito
         request.setAttribute("modalExito", "true");
