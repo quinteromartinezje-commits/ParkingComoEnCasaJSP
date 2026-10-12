@@ -1,84 +1,115 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('formIngreso');
-    const btnRegistrar = document.getElementById('btnRegistrar');
     const placaInput = document.getElementById('placa');
     const fechaHoraInput = document.getElementById('fechaHora');
-    const cupoInput = document.getElementById('cupo');
-    const ticketCode = document.getElementById('ticketCode');
+    const cupoSelect = document.getElementById('cupo');
+    const vehicleBtns = document.querySelectorAll('.vehicle-btn');
 
-    // Establecer fecha y hora actual
-    function actualizarFechaHora() {
+    // 1. Fecha y hora automática
+    if (fechaHoraInput) {
         const ahora = new Date();
-        const fecha = ahora.toLocaleDateString('es-CO');
-        const hora = ahora.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
-        if (fechaHoraInput) fechaHoraInput.value = `${fecha} - ${hora}`;
+        fechaHoraInput.value = ahora.toLocaleString('es-CO', { 
+            year: 'numeric', month: '2-digit', day: '2-digit', 
+            hour: '2-digit', minute: '2-digit' 
+        });
     }
-    actualizarFechaHora();
 
-    // Generar ticket aleatorio
-    function generarTicket() {
-        const numero = Math.floor(Math.random() * 9000) + 1000;
-        if (ticketCode) ticketCode.textContent = `#TKT-2026-${numero}`;
+    // 2. Mayúsculas en placa y ocultar error al escribir
+    if (placaInput) {
+        placaInput.addEventListener('input', function (e) {
+            e.target.value = e.target.value.toUpperCase();
+            ocultarError('error-placa', placaInput);
+        });
     }
-    generarTicket();
 
-    // Asignar cupo aleatorio
-    function asignarCupo() {
-        const cupos = ['A-14', 'A-22', 'M-3', 'C-7'];
-        const cupo = cupos[Math.floor(Math.random() * cupos.length)];
-        if (cupoInput) cupoInput.value = `${cupo} (Disponible)`;
+    // 3. Botones de tipo de vehículo - Agregar clase 'selected' cuando se marcan
+    vehicleBtns.forEach(function(btn) {
+        const radio = btn.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.addEventListener('change', function() {
+                // Quitar 'selected' de todos los botones
+                vehicleBtns.forEach(function(b) {
+                    b.classList.remove('selected');
+                });
+                // Agregar 'selected' al botón que contiene el radio marcado
+                if (this.checked) {
+                    btn.classList.add('selected');
+                }
+                // Ocultar error de tipo
+                ocultarError('error-tipo', null);
+            });
+        }
+    });
+
+    // 4. Ocultar error de cupo al seleccionar
+    if (cupoSelect) {
+        cupoSelect.addEventListener('change', function() {
+            ocultarError('error-cupo', cupoSelect);
+        });
     }
-    asignarCupo();
 
-    // Habilitar botón cuando hay datos
-    function verificarFormulario() {
-        const placa = placaInput?.value.trim();
-        const tipo = document.querySelector('input[name="tipo"]:checked');
-        if (btnRegistrar) {
-            btnRegistrar.disabled = !(placa && tipo);
+    // 5. Validación personalizada al enviar
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let valido = true;
+
+            // Validar placa
+            if (!placaInput || placaInput.value.trim() === '') {
+                mostrarError('error-placa', placaInput);
+                valido = false;
+            }
+
+            // Validar tipo
+            const tipoSeleccionado = document.querySelector('input[name="tipo"]:checked');
+            if (!tipoSeleccionado) {
+                mostrarError('error-tipo', null);
+                valido = false;
+            }
+
+            // Validar cupo
+            if (!cupoSelect || cupoSelect.value === '') {
+                mostrarError('error-cupo', cupoSelect);
+                valido = false;
+            }
+
+            // Si algo falla, detener el envío
+            if (!valido) {
+                e.preventDefault();
+            }
+            // Si todo está bien, dejar que el formulario viaje al Servlet
+        });
+    }
+
+    // Funciones auxiliares
+    function mostrarError(errorId, inputElement) {
+        const errorElement = document.getElementById(errorId);
+        if (errorElement) {
+            errorElement.classList.add('visible');
+        }
+        if (inputElement) {
+            inputElement.classList.add('error');
         }
     }
 
-    if (placaInput) placaInput.addEventListener('input', verificarFormulario);
-    document.querySelectorAll('input[name="tipo"]').forEach(r => {
-        r.addEventListener('change', verificarFormulario);
-    });
-
-    // Submit del formulario
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const placa = placaInput.value.trim();
-            const tipo = document.querySelector('input[name="tipo"]:checked');
-
-            if (!placa || !tipo) {
-                abrirModal('modalDatosIncompletos');
-                return;
-            }
-
-            // Simular placa duplicada (ejemplo)
-            if (placa.toUpperCase() === 'ABC-123') {
-                document.getElementById('placaDuplicada').textContent = placa;
-                abrirModal('modalPlacaDuplicada');
-                return;
-            }
-
-            // Llenar tiquete
-            document.getElementById('tiquetePlaca').textContent = placa;
-            document.getElementById('tiqueteTipo').textContent = tipo.value;
-            document.getElementById('tiqueteCupo').textContent = cupoInput.value;
-            document.getElementById('tiqueteHora').textContent = fechaHoraInput.value;
-            document.getElementById('tiqueteCodigo').textContent = ticketCode.textContent;
-
-            abrirModal('modalExito');
-        });
+    function ocultarError(errorId, inputElement) {
+        const errorElement = document.getElementById(errorId);
+        if (errorElement) {
+            errorElement.classList.remove('visible');
+        }
+        if (inputElement) {
+            inputElement.classList.remove('error');
+        }
     }
 });
 
+// Funciones para modales
+function cerrarModal(idModal) {
+    const modal = document.getElementById(idModal);
+    if (modal) modal.classList.remove('active');
+}
+
 function irAConsulta() {
-    cerrarModal('modalPlacaDuplicada');
-    window.location.href = 'consulta.html';
+    window.location.href = 'consulta.jsp';
 }
 
 function imprimirTiquete() {

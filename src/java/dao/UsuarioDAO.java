@@ -28,7 +28,7 @@ public class UsuarioDAO {
             if (rs.next()) {
                 System.out.println(">>> ¡ÉXITO! Usuario encontrado en la base de datos.");
                 usuario = new Usuario();
-                usuario.setId(rs.getInt("id")); 
+                usuario.setId(rs.getInt("id_usuario")); 
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setCorreo(rs.getString("correo"));
                 usuario.setRol(rs.getString("rol"));
