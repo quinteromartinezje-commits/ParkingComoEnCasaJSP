@@ -1,0 +1,253 @@
+/* ============================================
+   CONTROL DE CUPOS - Estilos específicos
+   ============================================ */
+
+/* Estadísticas superiores */
+.cupos-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: 20px 24px;
+    background-color: var(--color-bg);
+    border-radius: var(--border-radius);
+    border: 2px solid #e9ecef;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.stat-disponible .stat-icon {
+    background-color: rgba(51, 102, 204, 0.1);
+}
+
+.stat-ocupado .stat-icon {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.stat-reservado .stat-icon {
+    background-color: rgba(255, 193, 7, 0.15); /* warning con opacidad */
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: var(--font-size-label);
+    color: var(--color-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+.stat-value {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral);
+}
+
+.stat-disponible .stat-value {
+    color: var(--color-primary);
+}
+
+.stat-ocupado .stat-value {
+    color: var(--color-danger);
+}
+
+.stat-reservado .stat-value {
+    color: #e6a800; /* Versión oscura de warning para mejor lectura */
+}
+
+/* Toolbar con filtros y búsqueda */
+.cupos-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    gap: var(--spacing-lg);
+}
+
+.nivel-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.nivel-tab {
+    padding: 10px 20px;
+    border: 2px solid #dee2e6;
+    background-color: var(--color-bg);
+    color: var(--color-secondary);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family);
+}
+
+.nivel-tab:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.nivel-tab.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-bg);
+}
+
+.search-cupo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 10px 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    min-width: 250px;
+}
+
+.search-cupo svg {
+    stroke: #6b7280;
+    flex-shrink: 0;
+}
+
+.search-cupo input {
+    border: none;
+    background: transparent;
+    font-size: var(--font-size-body);
+    outline: none;
+    width: 100%;
+    color: var(--color-neutral);
+    font-family: var(--font-family);
+}
+
+/* Grid de cupos */
+.cupos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+}
+
+.cupo-card {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    border: 2px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 100px;
+}
+
+.cupo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.cupo-codigo {
+    font-size: 16px;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-xs);
+    font-family: var(--font-family);
+}
+
+.cupo-estado {
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: var(--font-family);
+}
+
+/* Estados de cupos */
+.cupo-disponible {
+    background-color: rgba(51, 102, 204, 0.05);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.cupo-disponible:hover {
+    background-color: rgba(51, 102, 204, 0.1);
+}
+
+.cupo-ocupado {
+    background-color: rgba(220, 53, 69, 0.05);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.cupo-ocupado:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.cupo-reservado {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color: var(--color-warning);
+    color: #b38600; /* Versión oscura para mejor contraste */
+}
+
+.cupo-reservado:hover {
+    background-color: rgba(255, 193, 7, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .cupos-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .cupos-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .nivel-tabs {
+        justify-content: center;
+    }
+    
+    .search-cupo {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .cupos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md);
+    }
+    
+    .cupo-codigo {
+        font-size: 12px;
+    }
+    
+    .cupo-estado {
+        font-size: 9px;
+    }
+}
+/* Mostrar/ocultar pisos */
+.piso-mapa {
+    display: none;
+}
+
+.piso-mapa.active {
+    display: block;
+}

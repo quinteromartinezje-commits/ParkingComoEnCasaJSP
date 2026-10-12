@@ -1,0 +1,493 @@
+/* ============================================
+   REGISTRO DE INGRESO - Estilos específicos
+   ============================================ */
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.ingreso-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg, 24px);
+}
+
+/* ============================================
+   FORMULARIO
+   ============================================ */
+.form-ingreso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 16px);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-secondary, #54595d);
+  font-size: var(--font-size-body, 14px);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.required {
+  color: var(--color-danger, #dc3545);
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: var(--border-radius, 6px);
+  font-size: var(--font-size-body, 14px);
+  background-color: var(--color-bg, white);
+  color: var(--color-neutral, #202122);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #3366cc);
+  box-shadow: 0 0 0 3px rgba(51, 102, 204, 0.1);
+}
+
+.form-input[readonly] {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.form-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--font-size-label, 12px);
+  color: var(--color-secondary, #54595d);
+  opacity: 0.7;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md, 16px);
+}
+
+/* ============================================
+   INPUTS CON ICONOS
+   ============================================ */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.input-with-icon .form-input {
+  padding-left: 40px;
+}
+
+/* ============================================
+   BOTONES DE TIPO DE VEHÍCULO
+   ============================================ */
+.vehicle-buttons {
+  display: flex;
+  gap: var(--spacing-sm, 8px);
+}
+
+.vehicle-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--color-primary, #3366cc);
+  background-color: var(--color-bg, white);
+  color: var(--color-primary, #3366cc);
+  border-radius: var(--border-radius, 6px);
+  cursor: pointer;
+  font-weight: var(--font-weight-semibold, 600);
+  font-size: var(--font-size-body, 14px);
+  transition: all 0.2s;
+  display: inline-block;
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.vehicle-btn input[type="radio"] {
+  display: none;
+}
+
+.vehicle-btn:hover {
+  background-color: rgba(51, 102, 204, 0.1);
+}
+
+.vehicle-btn.active {
+  background-color: var(--color-primary, #3366cc);
+  color: var(--color-bg, white);
+}
+
+/* ============================================
+   TICKET
+   ============================================ */
+.ticket-label {
+  font-size: var(--font-size-label, 12px);
+  text-transform: uppercase;
+  color: var(--color-secondary, #54595d);
+  font-weight: var(--font-weight-semibold, 600);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.ticket-code-display {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-primary, #3366cc);
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-radius: var(--border-radius, 6px);
+  border: 1px solid #dee2e6;
+}
+
+/* ============================================
+   TABLA
+   ============================================ */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-bg, white);
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-secondary, #54595d);
+  font-size: 13px;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+/* ============================================
+   BADGES - Sistema unificado
+   ============================================ */
+.table .badge {
+  padding: 4px 10px;
+  font-size: var(--font-size-label, 12px);
+  border-radius: var(--border-radius, 6px);
+  font-weight: var(--font-weight-semibold, 600);
+  display: inline-block;
+  font-family: var(--font-family, 'Inter', sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Badge de Tipo de Vehículo (Amarillo) */
+.table .badge-tipo {
+  background-color: rgba(255, 193, 7, 0.15);
+  color: #b38600;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+/* Badge de Zona (Verde informativo) */
+.table .badge-zona {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #1e7e34;
+  border: 1px solid rgba(40, 167, 69, 0.25);
+}
+
+.ticket-link {
+  color: var(--color-primary, #3366cc);
+  text-decoration: none;
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.ticket-link:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   MODALES - Estilos unificados
+   ============================================ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-card {
+  background-color: var(--color-bg, white);
+  border-radius: var(--border-radius, 8px);
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: var(--font-weight-bold, 700);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+/* Protección de íconos en modales */
+.modal-overlay .modal-header svg {
+  flex-shrink: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  overflow: visible !important;
+}
+
+/* Modal de advertencia */
+.modal-warning .modal-header {
+  background-color: #fffbeb;
+  border-bottom: 2px solid var(--color-warning, #f59e0b);
+}
+
+.modal-warning .modal-header h3 {
+  color: #92400e;
+}
+
+.modal-warning .modal-header svg {
+  stroke: var(--color-warning, #f59e0b) !important;
+}
+
+/* Modal de éxito */
+.modal-success .modal-header {
+  background-color: #ecfdf5;
+  border-bottom: 2px solid #10b981;
+}
+
+.modal-success .modal-header h3 {
+  color: #065f46;
+}
+
+.modal-success .modal-header svg {
+  stroke: #10b981 !important;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-body p {
+  margin: 8px 0;
+  color: var(--color-secondary, #54595d);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modal-hint {
+  font-size: 13px;
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #f9fafb;
+  border-radius: var(--border-radius, 6px);
+  border-left: 3px solid var(--color-warning, #f59e0b);
+}
+
+/* ============================================
+   TIQUETE - Vista previa para imprimir
+   ============================================ */
+.tiquete-preview {
+  border: 2px dashed #d1d5db;
+  border-radius: var(--border-radius, 8px);
+  padding: 20px;
+  background-color: #fafafa;
+  font-family: 'Courier New', monospace;
+}
+
+.tiquete-header {
+  text-align: center;
+  border-bottom: 1px solid #d1d5db;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tiquete-header strong {
+  font-size: 16px;
+  color: var(--color-neutral, #202122);
+}
+
+.tiquete-header span {
+  font-size: var(--font-size-label, 12px);
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tiquete-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tiquete-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px dotted #d1d5db;
+}
+
+.tiquete-row:last-child {
+  border-bottom: none;
+}
+
+.tiquete-label {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.tiquete-value {
+  font-size: 14px;
+  color: var(--color-neutral, #202122);
+  font-weight: var(--font-weight-bold, 700);
+}
+
+.tiquete-ticket {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px solid var(--color-primary, #3366cc);
+}
+
+.tiquete-ticket .tiquete-value {
+  font-size: 18px;
+  color: var(--color-primary, #3366cc);
+  font-weight: var(--font-weight-bold, 700);
+}
+
+/* ============================================
+   BOTÓN DE REGISTRO
+   ============================================ */
+#btnRegistrar {
+  padding: 16px 32px !important;
+  font-size: 16px !important;
+  font-weight: var(--font-weight-bold, 700) !important;
+  min-height: 56px;
+  transition: all 0.3s ease;
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+#btnRegistrar:disabled {
+  background-color: #9ca3af !important;
+  color: #e5e7eb !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+#btnRegistrar:disabled:hover {
+  background-color: #9ca3af !important;
+  transform: none;
+}
+
+#btnRegistrar:not(:disabled) {
+  background-color: var(--color-primary, #3366cc) !important;
+  color: var(--color-bg, white) !important;
+  cursor: pointer !important;
+}
+
+#btnRegistrar:not(:disabled):hover {
+  background-color: #244a99 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(51, 102, 204, 0.3);
+}
+
+/* ============================================
+   ESTILOS DE IMPRESIÓN
+   ============================================ */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .tiquete-preview, .tiquete-preview * {
+    visibility: visible;
+  }
+  
+  .tiquete-preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 300px;
+    border: 2px solid #000;
+    background: white;
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .ingreso-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .vehicle-buttons {
+    flex-direction: column;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

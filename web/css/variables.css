@@ -1,0 +1,35 @@
+:root {
+  /* Paleta de Colores Oficial */
+  --color-primary: #3366cc;
+  --color-secondary: #54595d;
+  --color-tertiary: #fee77e;
+  --color-neutral: #202122;
+  --color-bg: #FFFFFF;
+  
+  /* Colores de Estado */
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+
+  /* Tipografía Inter */
+  --font-family: 'Inter', sans-serif;
+  --font-size-h1: 24px;
+  --font-size-h2: 18px;
+  --font-size-body: 14px;
+  --font-size-label: 12px;
+  
+  /* Pesos de fuente */
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-regular: 400;
+
+  /* Espaciados y Bordes */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --border-radius: 6px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+}

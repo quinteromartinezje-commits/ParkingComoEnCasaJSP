@@ -1,0 +1,230 @@
+/* ============================================
+   DASHBOARD - Estilos específicos
+   ============================================ */
+
+/* --- TARJETAS DE ESTADÍSTICAS --- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-lg, 24px);
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--color-bg, #FFFFFF);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--border-radius, 6px);
+  padding: 20px;
+  transition: box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.08));
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.stat-label {
+  font-size: var(--font-size-label, 13px);
+  color: var(--color-secondary, #54595d);
+  font-weight: var(--font-weight-medium, 500);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon.blue {
+  background-color: rgba(51, 102, 204, 0.1);
+  color: var(--color-primary, #3366cc);
+}
+
+.stat-icon.red {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: var(--color-danger, #dc3545);
+}
+
+.stat-value {
+  font-size: var(--font-size-h1, 28px);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-primary, #3366cc);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.stat-change {
+  font-size: var(--font-size-body, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.stat-change.positive {
+  color: var(--color-success, #10b981);
+}
+
+/* --- GRID INFERIOR --- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-lg, 24px);
+}
+
+/* --- LEYENDA --- */
+.legend {
+  display: flex;
+  gap: var(--spacing-md, 20px);
+  margin-bottom: var(--spacing-md, 20px);
+  justify-content: flex-end;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-label, 12px);
+  color: var(--color-secondary, #54595d);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot.blue { background-color: var(--color-primary, #3366cc); }
+.dot.gray { background-color: var(--color-danger, #dc3545); }
+.dot.yellow { background-color: var(--color-warning, #ffc107); }
+
+/* --- GRID DE CUPOS (Unificado con pantalla Cupos) --- */
+.cupos-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-sm, 8px);
+}
+
+.cupos {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm, 8px);
+  border-radius: var(--border-radius, 6px);
+  border: 2px solid;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-family, 'Inter', sans-serif);
+  font-weight: var(--font-weight-bold, 700);
+  font-size: 14px;
+}
+
+.cupos:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.1));
+}
+
+/* Cupo Disponible - Azul */
+.cupos.blue {
+  background-color: rgba(51, 102, 204, 0.05);
+  border-color: var(--color-primary, #3366cc);
+  color: var(--color-primary, #3366cc);
+}
+
+.cupos.blue:hover {
+  background-color: rgba(51, 102, 204, 0.1);
+}
+
+/* Cupo Ocupado - Rojo */
+.cupos.gray {
+  background-color: rgba(220, 53, 69, 0.05);
+  border-color: var(--color-danger, #dc3545);
+  color: var(--color-danger, #dc3545);
+}
+
+.cupos.gray:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Cupo Reservado - Amarillo */
+.cupos.yellow {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-color: var(--color-warning, #ffc107);
+  color: #b38600;
+}
+
+.cupos.yellow:hover {
+  background-color: rgba(255, 193, 7, 0.2);
+}
+
+/* --- ACTIVIDAD RECIENTE --- */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 16px);
+}
+
+.activity-item {
+  display: flex;
+  gap: var(--spacing-sm, 12px);
+  padding-bottom: var(--spacing-md, 16px);
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.activity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.activity-dot.blue { background-color: var(--color-primary, #3366cc); }
+.activity-dot.green { background-color: var(--color-success, #28a745); }
+.activity-dot.yellow { background-color: var(--color-warning, #ffc107); }
+.activity-dot.red { background-color: var(--color-danger, #dc3545); }
+
+.activity-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activity-content strong {
+  font-size: var(--font-size-body, 13px);
+  color: var(--color-neutral, #202122);
+  font-weight: var(--font-weight-semibold, 600);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.activity-content span {
+  font-size: var(--font-size-label, 12px);
+  color: var(--color-secondary, #54595d);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1200px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .cupos-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .cupos-grid { grid-template-columns: repeat(4, 1fr); }
+}

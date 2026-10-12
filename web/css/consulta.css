@@ -1,0 +1,311 @@
+/* ============================================
+   CONSULTA DE VEHÍCULOS - Estilos específicos
+   ============================================ */
+
+/* ============================================
+   BUSCADOR
+   ============================================ */
+.buscador-header {
+    margin-bottom: var(--spacing-md, 16px);
+}
+
+.buscador-header h2 {
+    font-size: var(--font-size-h1, 20px);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-neutral, #202122);
+    margin: 0;
+}
+
+.buscador-form {
+    display: flex;
+    gap: var(--spacing-md, 16px);
+    align-items: flex-end; /* Alinea todo en la parte inferior */
+}
+
+.form-row {
+    display: flex;
+    gap: var(--spacing-md, 16px);
+    flex: 1;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+/* Contenedor del botón con altura equivalente a label + input */
+.buscador-form .btn-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 70px; /* Misma altura aproximada que label + input */
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-secondary, #54595d);
+    font-size: var(--font-size-body, 14px);
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 36px 10px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius, 6px);
+    font-size: var(--font-size-body, 14px);
+    background-color: var(--color-bg, white);
+    color: var(--color-neutral, #202122);
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    font-family: var(--font-family, 'Inter', sans-serif);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2354595d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary, #3366cc);
+    box-shadow: 0 0 0 3px rgba(51, 102, 204, 0.1);
+}
+
+input.form-input {
+    background-image: none;
+    padding: 10px 12px;
+}
+
+.btn-buscar {
+    padding: 10px 24px;
+    height: 42px; /* Misma altura que el input */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    font-size: var(--font-size-body, 14px);
+    font-weight: var(--font-weight-semibold, 600);
+}
+
+/* ============================================
+   FORMULARIOS (con flecha personalizada)
+   ============================================ */
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-secondary, #54595d);
+    font-size: var(--font-size-body, 14px);
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 36px 10px 12px; /* Padding derecho extra para la flecha */
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius, 6px);
+    font-size: var(--font-size-body, 14px);
+    background-color: var(--color-bg, white);
+    color: var(--color-neutral, #202122);
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    font-family: var(--font-family, 'Inter', sans-serif);
+    
+    /* Quitar flecha nativa del navegador */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Flecha SVG personalizada con espacio */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2354595d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center; /* 12px de espacio desde el borde */
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary, #3366cc);
+    box-shadow: 0 0 0 3px rgba(51, 102, 204, 0.1);
+}
+
+/* Ajuste especial para inputs que NO son select (para que no tengan la flecha) */
+input.form-input {
+    background-image: none;
+    padding: 10px 12px;
+}
+
+.btn-buscar {
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+/* ============================================
+   RESULTADOS
+   ============================================ */
+.resultados-section {
+    margin-top: var(--spacing-lg, 24px);
+}
+
+.resultados-titulo {
+    font-size: var(--font-size-h1, 20px);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-neutral, #202122);
+    margin-bottom: var(--spacing-md, 16px);
+}
+
+/* ============================================
+   TABLA
+   ============================================ */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-bg, white);
+}
+
+.table th,
+.table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-secondary, #54595d);
+    font-size: 13px;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+.badge-placa {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius, 6px);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-neutral, #202122);
+    font-size: var(--font-size-body, 14px);
+}
+
+.table .badge {
+    padding: 6px 12px;
+    font-size: var(--font-size-label, 12px);
+    border-radius: 20px;
+    font-weight: var(--font-weight-semibold, 600);
+    display: inline-block;
+}
+
+.badge-en-patio {
+    background-color: rgba(51, 102, 204, 0.1);
+    color: var(--color-primary, #3366cc);
+    border: 1px solid rgba(51, 102, 204, 0.3);
+}
+
+.badge-finalizado {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #1e7e34;
+    border: 1px solid rgba(40, 167, 69, 0.25);
+}
+
+/* ============================================
+   FILAS EXPANDIBLES
+   ============================================ */
+.fila-principal {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.fila-principal:hover {
+    background-color: #f8f9fa;
+}
+
+.fila-detalle {
+    display: none;
+    background-color: #fafbfc;
+}
+
+.fila-detalle td {
+    padding: 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.detalle-contenido {
+    display: flex;
+    gap: var(--spacing-lg, 24px);
+    padding: var(--spacing-lg, 24px);
+}
+
+.detalle-columna {
+    flex: 1;
+}
+
+.detalle-columna h4 {
+    font-size: 12px;
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-secondary, #54595d);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 var(--spacing-sm, 8px) 0;
+}
+
+.detalle-columna p {
+    margin: 6px 0;
+    font-size: var(--font-size-body, 14px);
+    color: var(--color-neutral, #202122);
+    line-height: 1.6;
+}
+
+.detalle-columna strong {
+    color: var(--color-secondary, #54595d);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .buscador-form {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-buscar {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .detalle-contenido {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .table {
+        font-size: 12px;
+    }
+    
+    .table th,
+    .table td {
+        padding: 8px;
+    }
+}

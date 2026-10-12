@@ -1,0 +1,303 @@
+/* ============================================
+   REGISTRO DE INCIDENTES - Estilos específicos
+   ============================================ */
+
+.incidentes-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--spacing-lg, 24px);
+}
+
+/* ============================================
+   LISTA DE INCIDENTES (Izquierda)
+   ============================================ */
+.incidentes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 16px);
+}
+
+.incidentes-lista h2 {
+    font-size: var(--font-size-h1, 20px);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-neutral, #202122);
+    margin: 0 0 var(--spacing-sm, 8px) 0;
+}
+
+.incidente-card {
+    background: var(--color-bg, white);
+    border: 2px solid #e5e7eb;
+    border-radius: var(--border-radius, 8px);
+    padding: var(--spacing-md, 16px);
+    transition: all 0.2s;
+}
+
+.incidente-card:hover {
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.08));
+}
+
+/* Prioridad Alta - Borde amarillo */
+.incidente-alta {
+    border-color: var(--color-warning, #ffc107);
+    background-color: rgba(255, 193, 7, 0.05);
+}
+
+/* Prioridad Media - Borde gris */
+.incidente-media {
+    border-color: #6b7280;
+}
+
+/* Prioridad Baja - Borde verde suave */
+.incidente-baja {
+    border-color: #adb5bd;
+}
+
+.incidente-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 12px);
+    margin-bottom: var(--spacing-sm, 8px);
+}
+
+.badge-prioridad {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: var(--font-size-label, 12px);
+    font-weight: var(--font-weight-semibold, 600);
+    text-transform: uppercase;
+}
+
+.badge-alta {
+    background-color: var(--color-warning, #ffc107);
+    color: #202122;
+}
+
+.badge-media {
+    background-color: #6b7280;
+    color: white;
+}
+
+.badge-baja {
+    background-color: #adb5bd;
+    color: white;
+}
+
+.incidente-titulo {
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-neutral, #202122);
+    font-size: var(--font-size-body, 14px);
+    flex: 1;
+}
+
+.incidente-tiempo {
+    font-size: var(--font-size-label, 12px);
+    color: var(--color-secondary, #54595d);
+}
+
+.incidente-descripcion {
+    font-size: var(--font-size-body, 14px);
+    color: var(--color-secondary, #54595d);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-sm, 12px);
+}
+
+.incidente-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-sm, 8px);
+    border-top: 1px solid #e9ecef;
+}
+
+.incidente-reportado {
+    font-size: var(--font-size-label, 12px);
+    color: var(--color-secondary, #54595d);
+}
+
+.badge-tipo {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: var(--font-size-label, 12px);
+    font-weight: var(--font-weight-semibold, 600);
+}
+
+.badge-reclamo {
+    background-color: rgba(51, 102, 204, 0.1);
+    color: var(--color-primary, #3366cc);
+}
+
+.badge-novedad {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #495057;
+}
+
+.badge-dano {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--color-danger, #dc3545);
+}
+
+/* ============================================
+   FORMULARIO (Derecha)
+   ============================================ */
+.incidentes-form {
+    position: sticky;
+    top: 24px;
+}
+
+.form-incidente {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 16px);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-secondary, #54595d);
+    font-size: var(--font-size-body, 14px);
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius, 6px);
+    font-size: var(--font-size-body, 14px);
+    background-color: var(--color-bg, white);
+    color: var(--color-neutral, #202122);
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary, #3366cc);
+    box-shadow: 0 0 0 3px rgba(51, 102, 204, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Radio buttons horizontales */
+.radio-group.horizontal {
+    display: flex;
+    gap: var(--spacing-sm, 12px);
+}
+
+.radio-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid #dee2e6;
+    border-radius: var(--border-radius, 6px);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.radio-btn input[type="radio"] {
+    display: none;
+}
+
+.radio-btn span {
+    font-size: var(--font-size-body, 14px);
+    font-weight: var(--font-weight-medium, 500);
+    color: var(--color-secondary, #54595d);
+}
+
+.radio-btn:hover {
+    border-color: var(--color-primary, #3366cc);
+    background-color: rgba(51, 102, 204, 0.05);
+}
+
+.radio-btn input[type="radio"]:checked + span {
+    color: var(--color-primary, #3366cc);
+    font-weight: var(--font-weight-semibold, 600);
+}
+
+.radio-btn:has(input[type="radio"]:checked) {
+    border-color: var(--color-primary, #3366cc);
+    background-color: var(--color-primary, #3366cc);
+}
+
+.radio-btn:has(input[type="radio"]:checked) span {
+    color: var(--color-bg, white);
+}
+
+/* Colores específicos para prioridad */
+.prioridad-alta:has(input[type="radio"]:checked) {
+    border-color: var(--color-warning, #ffc107);
+    background-color: var(--color-warning, #ffc107);
+}
+
+.prioridad-media:has(input[type="radio"]:checked) {
+    border-color: #6b7280;
+    background-color: #6b7280;
+}
+
+.prioridad-baja:has(input[type="radio"]:checked) {
+    border-color: #adb5bd;
+    background-color: #adb5bd;
+}
+
+/* ============================================
+   FILE UPLOAD
+   ============================================ */
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg, 24px);
+    border: 2px dashed #dee2e6;
+    border-radius: var(--border-radius, 6px);
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s;
+    gap: var(--spacing-sm, 8px);
+}
+
+.file-upload:hover {
+    border-color: var(--color-primary, #3366cc);
+    background-color: rgba(51, 102, 204, 0.05);
+}
+
+.file-upload svg {
+    margin-bottom: var(--spacing-sm, 8px);
+}
+
+.file-upload span {
+    font-size: var(--font-size-body, 14px);
+    color: var(--color-secondary, #54595d);
+}
+
+.file-input {
+    display: none;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .incidentes-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .incidentes-form {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .radio-group.horizontal {
+        flex-direction: column;
+    }
+}

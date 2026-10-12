@@ -1,0 +1,385 @@
+/* ============================================
+   LAYOUT GENERAL - Parking Como en Casa
+   ============================================ */
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.sidebar {
+  width: 250px;
+  background-color: #3366cc;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-logo-img {
+  width: 140px;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+}
+
+.sidebar-title {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+  text-align: center;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 4px;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.sidebar-nav a.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  border-left: 3px solid #fee77e;
+  font-weight: 600;
+}
+
+.sidebar-nav a svg {
+  flex-shrink: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  display: inline-block !important;
+  overflow: visible !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+/* ============================================
+   CONTENIDO PRINCIPAL
+   ============================================ */
+.main-content {
+  flex: 1;
+  margin-left: 250px;
+  background-color: #FFFFFF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   NAVBAR / HEADER
+   ============================================ */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #FFFFFF;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #202122;
+  margin: 0;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #54595d;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #54595d;
+}
+
+.user-avatar svg {
+  stroke: #54595d;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #202122;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #54595d;
+}
+
+/* ============================================
+   ÁREA DE CONTENIDO
+   ============================================ */
+.content-area {
+  padding: 32px;
+  flex: 1;
+  background-color: #f8f9fa;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 200;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* ============================================
+   FOOTER DEL SIDEBAR (Cerrar Sesión)
+   ============================================ */
+.sidebar-footer {
+  margin-top: auto; /* Empuja el footer al fondo del sidebar */
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.logout-btn svg {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   PROTECCIÓN GLOBAL DE ÍCONOS EN MODALES
+   ============================================ */
+.modal-overlay .modal-header svg {
+    flex-shrink: 0 !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    overflow: visible !important;
+}
+
+/* Asegurar que los colores de advertencia/éxito no se pierdan */
+.modal-header-warning svg {
+    stroke: #f59e0b !important;
+}
+
+.modal-header-success svg {
+    stroke: #10b981 !important;
+}
+
+.modal-edit .modal-header svg {
+    stroke: #3366cc !important;
+}
+
+/* ============================================
+   MODALES GLOBALES - Estilo unificado
+   ============================================ */
+.modal-card {
+    border-radius: 12px !important;
+    overflow: hidden; /* Esto es clave: recorta las esquinas del header/footer */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.modal-footer {
+    border-radius: 0 0 12px 12px !important;
+}
+
+/* ============================================
+   MODAL DE ÉXITO - Estilo global unificado
+   ============================================ */
+
+.modal-header-success {
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    border-bottom: 2px solid #10b981 !important;
+    padding: 16px 24px !important;
+}
+
+.modal-header-success h3 {
+    color: #065f46 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+}
+
+.modal-header-success svg {
+    stroke: #10b981 !important;
+    flex-shrink: 0 !important;
+    width: 24px !important;
+    height: 24px !important;
+}
+
+
+.modal-header-success h3::before,
+.modal-header-warning h3::before {
+    content: none !important;
+}
+
+/* Cuerpo del modal */
+.modal-body {
+    padding: 20px 24px !important;
+}
+
+.modal-body p {
+    color: #54595d !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    margin: 8px 0 !important;
+}
+
+/* Footer con botón alineado a la derecha */
+.modal-footer {
+    padding: 16px 24px !important;
+    border-top: 1px solid #e9ecef !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+}
+
+/* Botones dentro de modales */
+.modal-footer .btn {
+    padding: 8px 20px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+}
+
+/* ============================================
+   MODAL DE ADVERTENCIA (ALERTA) - Estilo global
+   ============================================ */
+.modal-header-warning {
+    background-color: rgba(245, 158, 11, 0.08) !important; 
+    border-bottom: 2px solid #f59e0b !important;
+    padding: 16px 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.modal-header-warning h3 {
+    color: #92400e !important; 
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+}
+
+
+.modal-header-warning svg {
+    stroke: #f59e0b !important;
+    flex-shrink: 0 !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+}

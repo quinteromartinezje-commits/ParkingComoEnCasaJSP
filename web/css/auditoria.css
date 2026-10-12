@@ -1,0 +1,203 @@
+/* ============================================
+   AUDITORÍA DEL SISTEMA - Estilos específicos
+   ============================================ */
+
+/* ============================================
+   FILTROS
+   ============================================ */
+.auditoria-filtros {
+    padding: var(--spacing-md, 16px);
+}
+
+.filtros-row {
+    display: flex;
+    gap: var(--spacing-md, 16px);
+}
+
+.filtros-row .form-group {
+    flex: 1;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-secondary, #54595d);
+    font-size: var(--font-size-body, 14px);
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 36px 10px 12px; /* Padding derecho extra para la flecha */
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius, 6px);
+    font-size: var(--font-size-body, 14px);
+    background-color: var(--color-bg, white);
+    color: var(--color-neutral, #202122);
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    font-family: var(--font-family, 'Inter', sans-serif);
+    
+    /* Quitar flecha nativa del navegador */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Flecha SVG personalizada con espacio */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2354595d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center; /* 12px de espacio desde el borde */
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary, #3366cc);
+    box-shadow: 0 0 0 3px rgba(51, 102, 204, 0.1);
+}
+
+/* Ajuste especial para inputs que no son select (para que no tengan la flecha) */
+input.form-input {
+    background-image: none;
+    padding: 10px 12px;
+}
+
+/* ============================================
+   TABLA
+   ============================================ */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-bg, white);
+}
+
+.table th,
+.table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-secondary, #54595d);
+    font-size: 13px;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.table td strong {
+    color: var(--color-neutral, #202122);
+    font-weight: var(--font-weight-semibold, 600);
+}
+
+/* ============================================
+   BADGES DE ACCIÓN
+   ============================================ */
+.table .badge {
+    padding: 4px 10px;
+    font-size: var(--font-size-label, 12px);
+    border-radius: var(--border-radius, 6px);
+    font-weight: var(--font-weight-semibold, 600);
+    display: inline-block;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+/* Badge: Registrar Ingreso (Azul) */
+.badge-accion-ingreso {
+    background-color: rgba(51, 102, 204, 0.1);
+    color: var(--color-primary, #3366cc);
+    border: 1px solid rgba(51, 102, 204, 0.3);
+}
+
+/* Badge: Registrar Salida (Gris) */
+.badge-accion-salida {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #495057;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+/* Badge: Modificar Tarifa (Amarillo) */
+.badge-accion-modificar {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #b38600;
+    border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+/* ============================================
+   PAGINACIÓN
+   ============================================ */
+.paginacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md, 16px);
+    border-top: 1px solid #e9ecef;
+}
+
+.paginacion-info {
+    font-size: var(--font-size-body, 14px);
+    color: var(--color-secondary, #54595d);
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.paginacion-botones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-pagina {
+    padding: 8px 14px;
+    border: 1px solid #dee2e6;
+    background-color: var(--color-bg, white);
+    color: var(--color-secondary, #54595d);
+    border-radius: var(--border-radius, 6px);
+    cursor: pointer;
+    font-size: var(--font-size-body, 14px);
+    font-weight: var(--font-weight-medium, 500);
+    transition: all 0.2s;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.btn-pagina:hover {
+    border-color: var(--color-primary, #3366cc);
+    color: var(--color-primary, #3366cc);
+}
+
+.btn-pagina.active {
+    background-color: var(--color-primary, #3366cc);
+    border-color: var(--color-primary, #3366cc);
+    color: var(--color-bg, white);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .filtros-row {
+        flex-direction: column;
+    }
+    
+    .table {
+        font-size: 12px;
+    }
+    
+    .table th,
+    .table td {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .paginacion {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+}

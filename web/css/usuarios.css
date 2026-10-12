@@ -1,0 +1,383 @@
+/* ============================================
+   GESTIÓN DE USUARIOS - Estilos específicos
+   ============================================ */
+
+.usuarios-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--spacing-lg, 24px);
+}
+
+/* ============================================
+   SECCIÓN DE TABLA
+   ============================================ */
+.usuarios-tabla-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 16px);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header h2 {
+    font-size: var(--font-size-h1, 20px);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-neutral, #202122);
+    margin: 0;
+}
+
+/* ============================================
+   TABLA
+   ============================================ */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-bg, white);
+}
+
+.table th,
+.table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-secondary, #54595d);
+    font-size: 13px;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.table td strong {
+    color: var(--color-neutral, #202122);
+    font-weight: var(--font-weight-semibold, 600);
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+.table .badge {
+    padding: 6px 12px;
+    font-size: var(--font-size-label, 12px);
+    border-radius: 20px;
+    font-weight: var(--font-weight-semibold, 600);
+    display: inline-block;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+/* Badge de Rol - Supervisor (Azul) */
+.badge-rol-supervisor {
+    background-color: rgba(51, 102, 204, 0.1);
+    color: var(--color-primary, #3366cc);
+    border: 1px solid rgba(51, 102, 204, 0.3);
+}
+
+/* Badge de Rol - Operario (Amarillo) */
+.badge-rol-operario {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #b38600;
+    border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+/* Badge Activo (Verde) */
+.badge-activo {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #1e7e34;
+    border: 1px solid rgba(40, 167, 69, 0.25);
+}
+
+/* Badge Inactivo (Gris) */
+.badge-inactivo {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #495057;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+/* ============================================
+   BOTONES DE ACCIÓN
+   ============================================ */
+.action-buttons {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: var(--border-radius, 6px);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-edit {
+    color: var(--color-primary, #3366cc);
+}
+
+.btn-edit:hover {
+    background-color: rgba(51, 102, 204, 0.1);
+}
+
+.btn-delete {
+    color: var(--color-danger, #dc3545);
+}
+
+.btn-delete:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* ============================================
+   FORMULARIO
+   ============================================ */
+.usuarios-form-section {
+    position: sticky;
+    top: 24px;
+}
+
+.form-usuario {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 16px);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: var(--font-size-body, 14px);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-secondary, #54595d);
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius, 6px);
+    font-size: var(--font-size-body, 14px);
+    background-color: var(--color-bg, white);
+    color: var(--color-neutral, #202122);
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary, #3366cc);
+    box-shadow: 0 0 0 3px rgba(51, 102, 204, 0.1);
+}
+
+.form-hint {
+    font-size: var(--font-size-label, 12px);
+    color: var(--color-secondary, #54595d);
+    opacity: 0.7;
+}
+
+/* ============================================
+   RADIO BUTTONS (Roles y Estado)
+   ============================================ */
+.radio-group {
+    display: flex;
+    gap: 12px;
+}
+
+.radio-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 2px solid #dee2e6;
+    border-radius: var(--border-radius, 6px);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.radio-btn input[type="radio"] {
+    display: none;
+}
+
+.radio-btn span {
+    font-size: var(--font-size-body, 14px);
+    font-weight: var(--font-weight-medium, 500);
+    color: var(--color-secondary, #54595d);
+}
+
+.radio-btn:hover {
+    border-color: var(--color-primary, #3366cc);
+    background-color: rgba(51, 102, 204, 0.05);
+}
+
+.radio-btn input[type="radio"]:checked + span {
+    color: var(--color-primary, #3366cc);
+    font-weight: var(--font-weight-semibold, 600);
+}
+
+.radio-btn:has(input[type="radio"]:checked) {
+    border-color: var(--color-primary, #3366cc);
+    background-color: var(--color-primary, #3366cc);
+}
+
+.radio-btn:has(input[type="radio"]:checked) span {
+    color: var(--color-bg, white);
+}
+
+/* ============================================
+   MODALES - Estilos unificados
+   ============================================ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-card {
+    background-color: var(--color-bg, white);
+    border-radius: var(--border-radius, 8px);
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    animation: slideDown 0.3s ease;
+    overflow: hidden;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: var(--font-weight-bold, 700);
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+/* Protección de íconos SVG */
+.modal-overlay .modal-header svg {
+    flex-shrink: 0 !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    overflow: visible !important;
+}
+
+.modal-header-warning {
+    background-color: #fffbeb;
+    border-bottom: 2px solid var(--color-warning, #f59e0b);
+}
+
+.modal-header-warning h3 {
+    color: #92400e;
+}
+
+.modal-header-warning svg {
+    stroke: var(--color-warning, #f59e0b) !important;
+}
+
+.modal-header-success {
+    background-color: #ecfdf5;
+    border-bottom: 2px solid #10b981;
+}
+
+.modal-header-success h3 {
+    color: #065f46;
+}
+
+.modal-header-success svg {
+    stroke: #10b981 !important;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-body p {
+    margin: 8px 0;
+    color: var(--color-secondary, #54595d);
+    font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.modal-hint {
+    font-size: 13px;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 12px;
+    padding: 10px;
+    background-color: #f9fafb;
+    border-radius: var(--border-radius, 6px);
+    border-left: 3px solid var(--color-warning, #f59e0b);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .usuarios-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .usuarios-form-section {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+    
+    .radio-group {
+        flex-direction: column;
+    }
+}
