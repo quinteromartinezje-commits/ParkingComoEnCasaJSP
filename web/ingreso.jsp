@@ -1,10 +1,18 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="modelo.Usuario" %>
 <%@ page import="java.util.List" %>
 <%@ page import="modelo.Ingreso" %>
+<%@ page import="util.Texto" %>
 <%
     Usuario usuario = (Usuario) session.getAttribute("usuario");
     if (usuario == null) {
         response.sendRedirect("login.jsp");
+        return;
+    }
+    // Los cupos libres y los Ãºltimos ingresos los prepara IngresoServlet (GET).
+    List<String> cuposLibres = (List<String>) request.getAttribute("cuposLibres");
+    if (cuposLibres == null) {
+        response.sendRedirect("IngresoServlet");
         return;
     }
     String nombre = usuario.getNombre();
@@ -22,7 +30,7 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/ingreso.css">
     
-    <!-- Estilos para validación personalizada y botones de tipo -->
+    <!-- Estilos para validaciÃ³n personalizada y botones de tipo -->
     <style>
         /* Mensajes de error personalizados */
         .error-message {
@@ -41,7 +49,7 @@
             border-color: #dc3545 !important;
         }
         
-        /* Botones de tipo de vehículo - Estilos para que se vean marcados */
+        /* Botones de tipo de vehÃ­culo - Estilos para que se vean marcados */
         .vehicle-buttons {
             display: flex;
             gap: 12px;
@@ -69,7 +77,7 @@
             cursor: pointer;
             accent-color: #3366cc;
         }
-        /* Cuando el radio está seleccionado, el label se resalta */
+        /* Cuando el radio estÃ¡ seleccionado, el label se resalta */
         .vehicle-btn.selected {
             border-color: #3366cc;
             background-color: rgba(51, 102, 204, 0.1);
@@ -87,20 +95,21 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="dashboard.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</a></li>
-                    <li><a href="ingreso.jsp" class="active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Ingreso</a></li>
-                    <li><a href="salida.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Salida</a></li>
+                    <li><a href="DashboardServlet"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</a></li>
+                    <li><a href="IngresoServlet" class="active"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Ingreso</a></li>
+                    <li><a href="SalidaServlet"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Salida</a></li>
+                    <li><a href="ReservaServlet"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Reservas</a></li>
                     <li><a href="tarifas.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Tarifas</a></li>
                     <li><a href="cupos.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Cupos</a></li>
                     <li><a href="usuarios.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Usuarios</a></li>
                     <li><a href="reportes.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Reportes</a></li>
-                    <li><a href="auditoria.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Auditoría</a></li>
+                    <li><a href="auditoria.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> AuditorÃ­a</a></li>
                     <li><a href="consulta.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Consulta</a></li>
                     <li><a href="incidentes.jsp"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Incidentes</a></li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
-                <a href="login.jsp" class="logout-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Cerrar Sesión</a>
+                <a href="login.jsp" class="logout-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Cerrar SesiÃ³n</a>
             </div>
         </aside>
 
@@ -119,13 +128,13 @@
                 </div>
             </header>
 
-                        <main class="content-area>"
+                        <main class="content-area">
                 
-                <!-- CUADRO ROJO DE DEPURACIÓN (Solo aparece si hay error) -->
+                <!-- CUADRO ROJO DE DEPURACIÃ“N (Solo aparece si hay error) -->
                 <% String errorDebug = (String) request.getAttribute("errorDebug"); %>
                 <% if (errorDebug != null) { %>
                     <div style="background-color: #dc3545; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-                        ?? ERROR DE DEPURACIÓN:<br><br>
+                        ?? ERROR DE DEPURACIÃ“N:<br><br>
                         <%= errorDebug %>
                     </div>
                 <% } %>
@@ -134,22 +143,22 @@
                     <div class="card">
                         <div class="card-header"><h2>Nuevo Registro de Entrada</h2></div>
                         
-                        <!-- Formulario SIN required (validación personalizada con JS) -->
+                        <!-- Formulario SIN required (validaciÃ³n personalizada con JS) -->
                         <form action="IngresoServlet" method="post" id="formIngreso" class="form-ingreso" novalidate>
                             
-                            <!-- Placa del Vehículo -->
+                            <!-- Placa del VehÃ­culo -->
                             <div class="form-group">
-                                <label class="form-label">Placa del Vehículo *</label>
+                                <label class="form-label">Placa del VehÃ­culo *</label>
                                 <div class="input-with-icon">
                                     <svg class="input-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3366cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
                                     <input type="text" id="placa" name="placa" class="form-input" placeholder="ABC-123" maxlength="8" style="text-transform: uppercase;">
                                 </div>
-                                <span class="error-message" id="error-placa">Por favor, ingresa la placa del vehículo</span>
+                                <span class="error-message" id="error-placa">Por favor, ingresa la placa del vehÃ­culo</span>
                             </div>
 
-                            <!-- Tipo de Vehículo -->
+                            <!-- Tipo de VehÃ­culo -->
                             <div class="form-group">
-                                <label class="form-label">Tipo de Vehículo *</label>
+                                <label class="form-label">Tipo de VehÃ­culo *</label>
                                 <div class="vehicle-buttons">
                                     <label class="vehicle-btn">
                                         <input type="radio" name="tipo" value="Carro"> Carro
@@ -161,7 +170,7 @@
                                         <input type="radio" name="tipo" value="Camioneta"> Camioneta
                                     </label>
                                 </div>
-                                <span class="error-message" id="error-tipo">Por favor, selecciona el tipo de vehículo</span>
+                                <span class="error-message" id="error-tipo">Por favor, selecciona el tipo de vehÃ­culo</span>
                             </div>
 
                             <!-- Fecha y Hora + Cupo -->
@@ -178,11 +187,14 @@
                                     <div class="input-with-icon">
                                         <svg class="input-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3366cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                                         <select id="cupo" name="cupo" class="form-input" style="cursor: pointer;">
-                                            <option value="" disabled selected>Seleccionar cupo disponible</option>
-                                            <option value="A-01">A-01</option>
-                                            <option value="A-02">A-02</option>
-                                            <option value="A-03">A-03</option>
-                                            <option value="M-01">M-01</option>
+                                            <% if (cuposLibres.isEmpty()) { %>
+                                                <option value="" disabled selected>No hay cupos disponibles</option>
+                                            <% } else { %>
+                                                <option value="" disabled selected>Seleccionar cupo disponible</option>
+                                                <% for (String c : cuposLibres) { %>
+                                                    <option value="<%= Texto.escapar(c) %>"><%= Texto.escapar(c) %></option>
+                                                <% } %>
+                                            <% } %>
                                         </select>
                                     </div>
                                     <span class="error-message" id="error-cupo">Por favor, selecciona un cupo</span>
@@ -194,7 +206,7 @@
                     </div>
 
                     <div class="card">
-                        <div class="card-header"><h2>Últimos Ingresos Registrados</h2></div>
+                        <div class="card-header"><h2>Ãšltimos Ingresos Registrados</h2></div>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -207,7 +219,7 @@
                                             for (Ingreso ing : lista) { 
                                     %>
                                         <tr>
-                                            <td><strong><%= ing.getPlaca() %></strong></td>
+                                            <td><strong><%= Texto.escapar(ing.getPlaca()) %></strong></td>
                                             <td><span class="badge badge-tipo"><%= ing.getTipo().toUpperCase() %></span></td>
                                             <td><%= ing.getFechaHora() %></td>
                                             <td><span class="badge badge-zona"><%= ing.getCupo() %></span></td>
@@ -217,7 +229,7 @@
                                             } 
                                         } else { 
                                     %>
-                                        <tr><td colspan="5" style="text-align: center; color: #7f8c8d;">Aún no hay ingresos registrados.</td></tr>
+                                        <tr><td colspan="5" style="text-align: center; color: #7f8c8d;">AÃºn no hay ingresos registrados.</td></tr>
                                     <% } %>
                                 </tbody>
                             </table>
@@ -236,10 +248,25 @@
                 <h3>Placa ya registrada</h3>
             </div>
             <div class="modal-body">
-                <p>El vehículo con placa <strong id="placaDuplicada"></strong> ya se encuentra dentro del parqueadero.</p>
+                <p>El vehÃ­culo con placa <strong id="placaDuplicada"></strong> ya se encuentra dentro del parqueadero.</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="cerrarModal('modalPlacaDuplicada')">Cerrar</button
+            </div>
+        </div>
+    </div>
+
+    <div id="modalCupoOcupado" class="modal-overlay">
+        <div class="modal-card modal-warning">
+            <div class="modal-header modal-header-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <h3>Cupo no disponible</h3>
+            </div>
+            <div class="modal-body">
+                <p>El cupo <strong id="cupoNoDisponible"></strong> ya estÃ¡ <span id="estadoCupo"></span>. Por favor elige otro cupo de la lista.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="cerrarModal('modalCupoOcupado')">Cerrar</button>
             </div>
         </div>
     </div>
@@ -281,6 +308,11 @@
                 document.getElementById('tiqueteCupo').textContent = '<%= request.getAttribute("tCupo") != null ? request.getAttribute("tCupo") : "" %>';
                 document.getElementById('tiqueteHora').textContent = '<%= request.getAttribute("tHora") != null ? request.getAttribute("tHora") : "" %>';
                 document.getElementById('tiqueteCodigo').textContent = '<%= request.getAttribute("tTicket") != null ? request.getAttribute("tTicket") : "" %>';
+            <% } %>
+            <% if ("true".equals(request.getAttribute("modalCupo"))) { %>
+                document.getElementById('modalCupoOcupado').classList.add('active');
+                document.getElementById('cupoNoDisponible').textContent = '<%= Texto.escapar((String) request.getAttribute("cupoNoDisponible")) %>';
+                document.getElementById('estadoCupo').textContent = '<%= Texto.escapar((String) request.getAttribute("estadoCupo")) %>';
             <% } %>
             <% if ("true".equals(request.getAttribute("modalError"))) { %>
                 document.getElementById('modalPlacaDuplicada').classList.add('active');

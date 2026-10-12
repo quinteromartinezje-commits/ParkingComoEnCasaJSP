@@ -1,0 +1,20 @@
+/* Mensajes de aviso (éxito y error) */
+.msg {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.msg-ok {
+  background-color: #e7f6ee;
+  color: #146c43;
+  border: 1px solid #b7e4cb;
+}
+
+.msg-error {
+  background-color: #fdecee;
+  color: #b02a37;
+  border: 1px solid #f5c2c7;
+}

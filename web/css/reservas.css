@@ -1,0 +1,15 @@
+/* Página de reservas */
+.btn-mini {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.form-hint {
+  color: #6b7280;
+  font-size: 13px;
+  margin: 4px 0 16px;
+}
+
+.table small {
+  color: #6b7280;
+}

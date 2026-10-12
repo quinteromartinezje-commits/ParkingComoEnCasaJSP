@@ -1,0 +1,5 @@
+Repositorio del proyecto (GitHub):
+https://github.com/quinteromartinezje-commits/ParkingComoEnCasaJSP
+
+Evidencia: GA7-220501096-AA2-EV02 - Módulos de software codificados y probados
+Proyecto: Parking Como en Casa (Java Servlets + JSP + MySQL)

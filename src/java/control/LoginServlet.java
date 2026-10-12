@@ -20,7 +20,7 @@ public class LoginServlet extends HttpServlet {
         // 1. Recoger los datos que el usuario escribió en el login.jsp
         String correo = request.getParameter("correo");
         String password = request.getParameter("password");
-           System.out.println(">>> DATOS QUE LLEGAN: Correo=" + correo + " | Contraseña=" + password);
+        System.out.println(">>> Intento de inicio de sesión: " + correo);
         
         // 2. Llamar al detective (DAO) para que valide los datos
         UsuarioDAO dao = new UsuarioDAO();
@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("usuario", usuarioValido);
             
             // Lo mandamos al dashboard (la página principal)
-            response.sendRedirect("dashboard.jsp"); 
+            response.sendRedirect("DashboardServlet"); 
         } else {
             // El usuario o contraseña están mal
             // Guardamos un mensaje de error para mostrarlo en el login

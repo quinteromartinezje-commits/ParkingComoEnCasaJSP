@@ -5,7 +5,7 @@
 /* --- TARJETAS DE ESTADÍSTICAS --- */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg, 24px);
   margin-bottom: 32px;
 }
@@ -227,4 +227,27 @@
 @media (max-width: 768px) {
   .stats-grid { grid-template-columns: 1fr; }
   .cupos-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* --- AÑADIDOS: tarjetas con texto de apoyo y variación negativa --- */
+.stat-change.negative {
+  color: var(--color-danger, #dc3545);
+}
+
+.stat-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--color-secondary, #54595d);
+  font-family: var(--font-family, 'Inter', sans-serif);
+}
+
+.stat-sub a {
+  color: var(--color-primary, #3366cc);
+  text-decoration: none;
+}
+
+.dashboard-refresh {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--color-secondary, #54595d);
 }
