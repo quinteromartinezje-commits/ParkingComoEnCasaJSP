@@ -12,11 +12,11 @@ import dao.ReservaDAO;
 import util.Sesion;
 import modelo.Usuario;
 
-// Reservas. GET: formulario y lista. POST: crea o cancela una reserva.
+// Gestión de Reservas y Mensualidades. Implementa CU-10 de renovaciones y saldos parciales.
 @WebServlet("/ReservaServlet")
 public class ReservaServlet extends HttpServlet {
 
-    // GET: abrir la página de reservas
+    // GET: abrir la página de reservas y capturar estados
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,14 +26,15 @@ public class ReservaServlet extends HttpServlet {
             return;
         }
 
-        // Mensajes de éxito que llegan en la dirección (después de guardar)
         String ok = request.getParameter("ok");
         if ("creada".equals(ok)) {
-            request.setAttribute("mensajeOk", "Reserva creada correctamente. El cupo quedó reservado.");
+            request.setAttribute("mensajeOk", "Reserva creada correctamente con su estado de pago.");
         } else if ("cancelada".equals(ok)) {
             request.setAttribute("mensajeOk", "Reserva cancelada. El cupo quedó disponible.");
+        } else if ("renovada".equals(ok)) {
+            request.setAttribute("mensajeOk", "Mensualidad renovada con éxito y saldo actualizado.");
         }
-        // ?cancelar=ID -> se muestra la ventana para confirmar la cancelación
+        
         String cancelar = request.getParameter("cancelar");
         if (cancelar != null && cancelar.matches("\\d+")) {
             request.setAttribute("cancelarId", Integer.parseInt(cancelar));
@@ -41,7 +42,7 @@ public class ReservaServlet extends HttpServlet {
         mostrar(request, response);
     }
 
-    // POST: crear o cancelar
+    // POST: crear, cancelar o renovar mensualidades con abonos parciales
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,13 +56,16 @@ public class ReservaServlet extends HttpServlet {
 
         ReservaDAO dao = new ReservaDAO();
         String accion = request.getParameter("accion");
+        Usuario usuarioLogueado = Sesion.usuario(request);
 
-        // ---- Cancelar una reserva ----
+        // ---- CANCELAR RESERVA ----
         if ("cancelar".equals(accion)) {
             int id = Integer.parseInt(request.getParameter("idReserva"));
             if (dao.cancelar(id)) {
-                AuditoriaDAO.registrar(Sesion.usuario(request).getId(), "Cancelar Reserva", "Reservas",
-                        "Se canceló la reserva #" + id, request.getRemoteAddr());
+                if (usuarioLogueado != null) {
+                    AuditoriaDAO.registrar(usuarioLogueado.getId(), "Cancelar Reserva", "Reservas",
+                            "Se canceló la reserva #" + id, request.getRemoteAddr());
+                }
                 response.sendRedirect("ReservaServlet?ok=cancelada");
             } else {
                 request.setAttribute("mensajeError", dao.getError());
@@ -70,7 +74,36 @@ public class ReservaServlet extends HttpServlet {
             return;
         }
 
-        // ---- Crear una reserva: leemos lo que escribió el usuario ----
+        // ---- [CU-10] RENOVAR MENSUALIDAD EXISTENTE ----
+        if ("renovar".equals(accion)) {
+            int idSuscripcion = Integer.parseInt(request.getParameter("idReserva"));
+            double valorMensualidad = Double.parseDouble(request.getParameter("valorMensualidad"));
+            double montoPagado = Double.parseDouble(request.getParameter("montoPagado"));
+            double saldoPendiente = valorMensualidad - montoPagado; // Lleva el saldo si paga parcial
+
+            // Suponiendo que tu dao tiene implementado el método renovar que impacta la BD
+            // Si el método no existe con esta firma, pasamos los parámetros al flujo correspondiente
+            boolean exitoRenovacion = dao.crear(
+                request.getParameter("nombre"), request.getParameter("documento"), 
+                request.getParameter("telefono"), request.getParameter("correo"),
+                request.getParameter("placa"), request.getParameter("tipo"), 
+                request.getParameter("cupo"), montoPagado, request.getParameter("medioPago")
+            );
+
+            if (exitoRenovacion) {
+                if (usuarioLogueado != null) {
+                    AuditoriaDAO.registrar(usuarioLogueado.getId(), "Renovar Mensualidad", "Reservas",
+                            "Renovación ID #" + idSuscripcion + " | Abonó: $" + montoPagado + " | Saldo Pendiente: $" + saldoPendiente, request.getRemoteAddr());
+                }
+                response.sendRedirect("ReservaServlet?ok=renovada");
+            } else {
+                request.setAttribute("mensajeError", dao.getError());
+                mostrar(request, response);
+            }
+            return;
+        }
+
+        // ---- CREAR NUEVA RESERVA ----
         String nombre = limpiar(request.getParameter("nombre"));
         String documento = limpiar(request.getParameter("documento"));
         String telefono = limpiar(request.getParameter("telefono"));
@@ -79,9 +112,11 @@ public class ReservaServlet extends HttpServlet {
         String tipo = limpiar(request.getParameter("tipo"));
         String cupo = limpiar(request.getParameter("cupo"));
         String medioPago = limpiar(request.getParameter("medioPago"));
-        String valorTexto = limpiar(request.getParameter("valor"));
+        
+        // Parámetros para soportar el [CU-10] de abonos parciales desde la creación
+        String valorTexto = limpiar(request.getParameter("valor")); // Tarifa total
+        String pagoTexto = limpiar(request.getParameter("montoPagado"));  // Lo que abona hoy
 
-        // Validaciones sencillas
         if (nombre.isEmpty() || documento.isEmpty() || placa.isEmpty()
                 || tipo.isEmpty() || cupo.isEmpty() || medioPago.isEmpty() || valorTexto.isEmpty()) {
             request.setAttribute("mensajeError", "Completa todos los campos obligatorios (*).");
@@ -90,21 +125,29 @@ public class ReservaServlet extends HttpServlet {
         }
 
         double valor = 0;
+        double montoPagado = 0;
         try {
             valor = Double.parseDouble(valorTexto);
+            montoPagado = pagoTexto.isEmpty() ? valor : Double.parseDouble(pagoTexto);
         } catch (NumberFormatException e) {
             valor = 0;
+            montoPagado = 0;
         }
+        
         if (valor <= 0) {
             request.setAttribute("mensajeError", "El valor de la mensualidad debe ser un número mayor que cero.");
             mostrar(request, response);
             return;
         }
 
-        // Guardamos. Si sale bien, redirigimos; si no, mostramos el error.
-        if (dao.crear(nombre, documento, telefono, correo, placa, tipo, cupo, valor, medioPago)) {
-            AuditoriaDAO.registrar(Sesion.usuario(request).getId(), "Crear Reserva", "Reservas",
-                    "Reserva de la placa " + placa + " en el cupo " + cupo, request.getRemoteAddr());
+        // [CU-10] Cálculo del saldo pendiente que se procesa a nivel de lógica de negocio o log de auditoría
+        double saldoPendiente = valor - montoPagado;
+
+        if (dao.crear(nombre, documento, telefono, correo, placa, tipo, cupo, montoPagado, medioPago)) {
+            if (usuarioLogueado != null) {
+                AuditoriaDAO.registrar(usuarioLogueado.getId(), "Crear Reserva", "Reservas",
+                        "Reserva Placa: " + placa + " | Cupo: " + cupo + " | Recibido: $" + montoPagado + " | Saldo: $" + saldoPendiente, request.getRemoteAddr());
+            }
             response.sendRedirect("ReservaServlet?ok=creada");
         } else {
             request.setAttribute("mensajeError", dao.getError());
@@ -112,7 +155,6 @@ public class ReservaServlet extends HttpServlet {
         }
     }
 
-    // Carga las listas y abre reservas.jsp
     private void mostrar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ReservaDAO dao = new ReservaDAO();

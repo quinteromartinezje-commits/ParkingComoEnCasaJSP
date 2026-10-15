@@ -136,6 +136,38 @@
                                         QR / Transferencia</label>
                                 </div>
                             </div>
+                            <!-- [CU-04] SECCIÓN DINÁMICA: CONTROL DE EFECTIVO -->
+                            <div id="seccionEfectivo" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px dashed #ccc;">
+                                <input type="hidden" name="totalCobro" value="<%= hayDetalle ? detalle.getTotal() : 0.0 %>">
+                                <input type="hidden" name="placaVehiculo" value="<%= hayDetalle ? detalle.getPlaca() : "" %>">
+                                
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="montoRecibido" style="display:block; margin-bottom: 6px; font-weight: bold; color: #333;">Monto Recibido ($)</label>
+                                    <input type="number" id="montoRecibido" name="montoRecibido" class="form-control" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem;" 
+                                           min="0" step="50" placeholder="Ej. 10000" oninput="calcularVueltas()" <%= !hayDetalle ? "disabled" : "" %>>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px;">
+                                    <span style="font-weight: 500; color: #6b7280;">Cambio / Vueltas:</span>
+                                    <span id="lblCambio" style="font-size: 1.2rem; font-weight: bold; color: #10b981;">$0</span>
+                                </div>
+                            </div>
+
+                            <script>
+                                function calcularVueltas() {
+                                    const total = parseFloat(document.getElementsByName("totalCobro")[0].value) || 0;
+                                    const recibido = parseFloat(document.getElementById("montoRecibido").value) || 0;
+                                    const lblCambio = document.getElementById("lblCambio");
+
+                                    if (recibido < total) {
+                                        lblCambio.innerText = "Monto insuficiente";
+                                        lblCambio.style.color = "#ef4444";
+                                    } else {
+                                        const vueltas = recibido - total;
+                                        lblCambio.innerText = "$" + vueltas.toLocaleString('es-CO', { minimumFractionDigits: 0 });
+                                        lblCambio.style.color = "#10b981";
+                                    }
+                                }
+                            </script>
 
                             <!-- BOTONES -->
                             <div class="action-buttons">

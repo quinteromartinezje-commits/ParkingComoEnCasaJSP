@@ -13,7 +13,7 @@ import dao.AuditoriaDAO;
 import dao.IngresoDAO;
 import modelo.Usuario;
 
-// Registro de ingreso. GET: formulario con cupos libres. POST: guarda el ingreso.
+// Registro de ingreso. GET: formulario con cupos libres. POST: guarda el ingreso con control de aforo CU-01/CU-02.
 @WebServlet("/IngresoServlet")
 public class IngresoServlet extends HttpServlet {
 
@@ -48,6 +48,38 @@ public class IngresoServlet extends HttpServlet {
         String cupo = request.getParameter("cupo");
 
         IngresoDAO dao = new IngresoDAO();
+
+        // [CU-01 / CU-02] VALIDACIÓN DE PARQUEADERO LLENO ANTES DE PROCESAR
+        if (tipo != null && !tipo.isEmpty()) {
+            boolean esMoto = tipo.equalsIgnoreCase("Moto");
+            java.util.List<String> cuposDisponibles = dao.getCuposDisponibles();
+            long cuposMotosLibres = 0;
+            long cuposCarrosLibres = 0;
+            
+            if (cuposDisponibles != null) {
+                for (String c : cuposDisponibles) {
+                    if (c != null && c.toUpperCase().startsWith("M")) {
+                        cuposMotosLibres++;
+                    } else if (c != null && c.toUpperCase().startsWith("A")) {
+                        cuposCarrosLibres++;
+                    }
+                }
+            }
+
+            if (esMoto && cuposMotosLibres == 0) {
+                request.setAttribute("modalLleno", "true");
+                request.setAttribute("tipoVehiculoLleno", "Motos (Celdas M)");
+                cargarListas(request, dao);
+                request.getRequestDispatcher("ingreso.jsp").forward(request, response);
+                return;
+            } else if (!esMoto && cuposCarrosLibres == 0) {
+                request.setAttribute("modalLleno", "true");
+                request.setAttribute("tipoVehiculoLleno", "Carros y Camionetas (Celdas A)");
+                cargarListas(request, dao);
+                request.getRequestDispatcher("ingreso.jsp").forward(request, response);
+                return;
+            }
+        }
 
         // 0. Validar los campos: cada uno que falte muestra su aviso rojo debajo
         boolean faltan = false;
@@ -111,7 +143,6 @@ public class IngresoServlet extends HttpServlet {
         }
         String estadoCupo = dao.getEstadoEspacio(idEspacio);
         if (!"disponible".equalsIgnoreCase(estadoCupo)) {
-            // Se muestra una alerta (modal) en la página y la lista de cupos se actualiza
             request.setAttribute("modalCupo", "true");
             request.setAttribute("cupoNoDisponible", cupo);
             request.setAttribute("estadoCupo", estadoCupo);
@@ -175,7 +206,6 @@ public class IngresoServlet extends HttpServlet {
         return session != null ? (Usuario) session.getAttribute("usuario") : null;
     }
 
-    // Datos que necesita ingreso.jsp: últimos ingresos y cupos libres
     private void cargarListas(HttpServletRequest request, IngresoDAO dao) {
         request.setAttribute("listaIngresos", dao.getUltimosIngresos());
         request.setAttribute("cuposLibres", dao.getCuposDisponibles());

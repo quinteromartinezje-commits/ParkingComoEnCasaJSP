@@ -14,6 +14,7 @@
     String claseTipo = "true".equals(request.getAttribute("modalTipo")) ? " active" : "";
     String claseTarifa = "true".equals(request.getAttribute("modalTarifa")) ? " active" : "";
     String clasePlaca = "true".equals(request.getAttribute("modalError")) ? " active" : "";
+    String claseLleno = "true".equals(request.getAttribute("modalLleno")) ? " active" : "";
 
     // Avisos de campos vacíos (los pone el servlet) y valores que la persona ya había elegido
     String errPlaca = (String) request.getAttribute("errPlaca");
@@ -274,6 +275,21 @@
             </div>
             <div class="modal-footer">
                 <a class="btn btn-primary" href="IngresoServlet">Entendido</a>
+            </div>
+        </div>
+    </div>
+                
+    <div id="modalParqueaderoLleno" class="modal-overlay<%= claseLleno %>">
+        <div class="modal-card modal-warning">
+            <div class="modal-header modal-header-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <h3 style="color: #ef4444;">Capacidad Máxima Alcanzada</h3>
+            </div>
+            <div class="modal-body">
+                <p>Lo sentimos, no es posible registrar el ingreso. La sección de <strong><%= request.getAttribute("tipoVehiculoLleno") %></strong> se encuentra totalmente llena en este momento.</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="IngresoServlet" style="background-color: #ef4444; border-color: #ef4444; text-decoration: none;">Entendido</a>
             </div>
         </div>
     </div>
