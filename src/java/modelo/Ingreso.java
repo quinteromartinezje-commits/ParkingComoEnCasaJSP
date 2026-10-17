@@ -1,5 +1,7 @@
 package modelo;
 
+// Guarda los datos de un ingreso de vehículo al parqueadero.
+// Los atributos coinciden con lo que se muestra en el formulario y en la tabla de Ingreso.
 public class Ingreso {
     private int id;
     private String placa;
@@ -8,8 +10,10 @@ public class Ingreso {
     private String fechaHora;
     private String ticket;
 
+    // Constructor vacío (lo usa el DAO al leer de la base de datos)
     public Ingreso() {}
 
+    // Constructor con los datos que llegan del formulario
     public Ingreso(String placa, String tipo, String cupo, String fechaHora, String ticket) {
         this.placa = placa;
         this.tipo = tipo;
@@ -18,6 +22,7 @@ public class Ingreso {
         this.ticket = ticket;
     }
 
+    // Getters y setters de cada atributo
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getPlaca() { return placa; }

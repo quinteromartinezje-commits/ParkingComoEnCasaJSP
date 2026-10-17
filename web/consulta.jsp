@@ -2,15 +2,19 @@
 <%@ page import="java.util.List, modelo.ConsultaFila" %>
 <%@ include file="sesion.jspf" %>
 <%
+    // Datos para el menú y el título de la página
     String paginaActiva = "consulta";
     String tituloPagina = "Consulta de Vehículos";
 
+    // Datos que envía ConsultaServlet: resultados, lo que se buscó y el estado elegido
     List<ConsultaFila> filas = (List<ConsultaFila>) request.getAttribute("filas");
     String buscar = (String) request.getAttribute("buscar");
     String estado = (String) request.getAttribute("estado");
     if (buscar == null) buscar = "";
     if (estado == null) estado = "todos";
+    // Id de la fila que está desplegada (si no hay ninguna, queda en 0)
     int verId = request.getAttribute("ver") == null ? 0 : (Integer) request.getAttribute("ver");
+    // Parte de la dirección que conserva la búsqueda al abrir o cerrar un detalle
     String q = "buscar=" + java.net.URLEncoder.encode(buscar, "UTF-8") + "&amp;estado=" + ver(estado);
 %>
 <!DOCTYPE html>
@@ -28,12 +32,15 @@
 </head>
 <body>
     <div class="app-container">
+        <%-- Menú lateral --%>
         <%@ include file="menu.jspf" %>
 
         <div class="main-content">
+            <%-- Barra de arriba con el título --%>
             <%@ include file="cabecera.jspf" %>
 
             <main class="content-area">
+                <%-- Formulario para buscar por placa, ticket o estado --%>
                 <div class="card">
                     <div class="buscador-header"><h2>Buscador General de Flota e Historial</h2></div>
                     <form class="buscador-form" action="ConsultaServlet" method="get">
@@ -57,6 +64,7 @@
                     </form>
                 </div>
 
+                <%-- Tabla de resultados --%>
                 <div class="resultados-section">
                     <h2 class="resultados-titulo">Resultados de Búsqueda</h2>
                     <div class="card">
@@ -65,6 +73,7 @@
                                 <tr><th>Placa</th><th>Tipo</th><th>Ticket</th><th>Ingreso</th><th>Salida</th><th>Duración</th><th>Monto</th><th>Estado</th></tr>
                             </thead>
                             <tbody>
+                                <%-- Si no hay resultados se muestra un mensaje; si hay, una fila por vehículo --%>
                                 <% if (filas == null || filas.isEmpty()) { %>
                                 <tr><td colspan="8" style="text-align:center;">No se encontraron vehículos.</td></tr>
                                 <% } else { for (ConsultaFila f : filas) {
@@ -80,6 +89,7 @@
                                     <td><strong><%= f.monto == null ? "Pendiente" : plata(f.monto) %></strong></td>
                                     <td><span class="badge <%= f.enPatio() ? "badge-en-patio" : "badge-finalizado" %>"><%= f.enPatio() ? "En Patio" : "Finalizado" %></span></td>
                                 </tr>
+                                <%-- Detalle de la fila: se despliega al hacer clic en la placa --%>
                                 <tr class="fila-detalle<%= abierta ? " abierta" : "" %>">
                                     <td colspan="8">
                                         <div class="detalle-contenido">

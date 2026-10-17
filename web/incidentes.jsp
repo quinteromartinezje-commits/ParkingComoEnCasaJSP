@@ -2,6 +2,7 @@
 <%@ page import="java.util.List, modelo.Incidente" %>
 <%@ include file="sesion.jspf" %>
 <%!
+    // Devuelve la clase de color según el tipo de incidente
     String claseTipo(String tipo) {
         if ("Daño".equals(tipo)) return "badge-dano";
         if ("Reclamo".equals(tipo)) return "badge-reclamo";
@@ -9,9 +10,11 @@
     }
 %>
 <%
+    // Datos para el menú y el título de la página
     String paginaActiva = "incidentes";
     String tituloPagina = "Registro de Incidentes";
 
+    // Datos que envía IncidenteServlet: lista de incidentes y mensajes de resultado
     List<Incidente> incidentes = (List<Incidente>) request.getAttribute("incidentes");
     String mensajeOk = (String) request.getAttribute("mensajeOk");
     String mensajeError = (String) request.getAttribute("mensajeError");
@@ -43,10 +46,12 @@
             <%@ include file="cabecera.jspf" %>
 
             <main class="content-area">
+                <%-- Mensajes de éxito o error al registrar --%>
                 <% if (mensajeOk != null) { %><div class="msg msg-ok"><%= ver(mensajeOk) %></div><% } %>
                 <% if (mensajeError != null) { %><div class="msg msg-error"><%= ver(mensajeError) %></div><% } %>
 
                 <div class="incidentes-layout">
+                    <%-- Lista de incidentes recientes, con color según la prioridad --%>
                     <div class="incidentes-lista">
                         <h2>Incidentes Reportados Recientemente</h2>
                         <% if (incidentes == null || incidentes.isEmpty()) { %>
@@ -71,6 +76,7 @@
 
                     <div class="incidentes-form">
                         <div class="card">
+                            <%-- Formulario para registrar un incidente nuevo --%>
                             <div class="card-header"><h2>Nuevo Incidente</h2></div>
                             <form action="IncidenteServlet" method="post" class="form-incidente">
                                 <div class="form-group">
